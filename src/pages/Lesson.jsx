@@ -295,7 +295,7 @@ function Lesson() {
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="fixed top-0 left-0 right-0 z-50 p-4"
+                className="sticky top-4 z-40 mb-8 px-4"
             >
                 <div className="glass-card rounded-2xl px-4 py-3 max-w-md mx-auto">
                     <div className="flex items-center justify-between mb-2">
@@ -330,7 +330,7 @@ function Lesson() {
             </motion.div>
 
             {/* Content */}
-            <div className="pt-28 px-4">
+            <div className="px-4">
                 <AnimatePresence mode="wait">
                     {stage === 'introduction' && currentItem && (
                         <IntroductionCard

@@ -10,13 +10,12 @@ function App() {
     <ThemeProvider>
       <ProgressProvider>
         <Router>
-          <Routes>
-            {/* Main learning path - no layout wrapper */}
-            <Route path="/" element={<Home />} />
-            <Route path="/lesson/:lessonId" element={<Lesson />} />
-
-            {/* Legacy routes can be kept for reference but hidden */}
-          </Routes>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/lesson/:lessonId" element={<Lesson />} />
+            </Routes>
+          </Layout>
         </Router>
       </ProgressProvider>
     </ThemeProvider>

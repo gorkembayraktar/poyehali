@@ -64,33 +64,23 @@ function LearningPath() {
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="sticky top-20 z-40 mb-8"
+                className="sticky top-4 z-30 mb-8 px-4 md:px-0"
             >
-                <div className="glass-card rounded-2xl p-4 mx-auto max-w-md">
+                <div className="glass-card rounded-2xl p-4 mx-auto max-w-lg border border-slate-200 dark:border-slate-800 shadow-sm">
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
-                            <HiSparkles className="w-5 h-5 text-indigo-500" />
+                            <HiAcademicCap className="w-5 h-5 text-indigo-500" />
                             <span className="font-bold text-slate-700 dark:text-slate-200">
-                                İlerleme
+                                Genel İlerleme
                             </span>
                         </div>
-                        <div className="flex items-center gap-3">
-                            {/* Streak */}
-                            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30">
-                                <HiFire className="w-4 h-4 text-orange-500" />
-                                <span className="text-sm font-bold text-orange-600 dark:text-orange-400">
-                                    {streak.current}
-                                </span>
-                            </div>
-                            {/* Percentage */}
-                            <span className="text-sm font-bold text-slate-500 dark:text-slate-400">
-                                {overallProgress}%
-                            </span>
-                        </div>
+                        <span className="text-sm font-bold text-slate-500 dark:text-slate-400">
+                            {overallProgress}%
+                        </span>
                     </div>
 
                     {/* Progress bar */}
-                    <div className="h-2 bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden">
+                    <div className="h-3 bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
                             initial={{ width: 0 }}
@@ -100,6 +90,7 @@ function LearningPath() {
                     </div>
                 </div>
             </motion.div>
+
 
             {/* Learning Path - Zigzag Layout */}
             <div className="max-w-lg mx-auto px-4">
