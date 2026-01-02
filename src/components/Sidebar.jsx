@@ -1,12 +1,24 @@
+import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { HiHome, HiTrophy, HiBookOpen, HiShoppingBag, HiUser, HiAcademicCap } from 'react-icons/hi2'
+import { HiHome, HiTrophy, HiBookOpen, HiShoppingBag, HiUser, HiAcademicCap, HiXMark } from 'react-icons/hi2'
 import { FaXTwitter, FaGithub } from 'react-icons/fa6'
 import logo from '../assets/logo.png'
 
 function Sidebar() {
     const navigate = useNavigate()
     const location = useLocation()
+
+    const [showPromo, setShowPromo] = useState(() => {
+        return sessionStorage.getItem('poyehali_sidebar_promo_dismissed') !== 'true'
+    })
+
+    const handleClosePromo = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setShowPromo(false)
+        sessionStorage.setItem('poyehali_sidebar_promo_dismissed', 'true')
+    }
 
     const width = 'w-64' // fixed width for sidebar
 
@@ -84,25 +96,34 @@ function Sidebar() {
             </nav>
 
             {/* Promo Card */}
-            <div className="px-4 mb-4">
-                <a
-                    href="https://kirilalfabesi.vercel.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block p-4 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-600 text-white shadow-lg shadow-orange-500/20 hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group"
-                >
-                    <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-2">
-                            <HiAcademicCap className="w-5 h-5" />
-                            <span className="text-[10px] font-black tracking-widest uppercase opacity-80">Önerilen Kaynak</span>
+            {showPromo && (
+                <div className="px-4 mb-4 relative group">
+                    <button
+                        onClick={handleClosePromo}
+                        className="absolute top-2 right-6 z-20 p-1 rounded-full bg-black/10 hover:bg-black/20 text-white/80 hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                        title="Kapat"
+                    >
+                        <HiXMark className="w-3 h-3" />
+                    </button>
+                    <a
+                        href="https://kirilalfabesi.vercel.app/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block p-4 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-600 text-white shadow-lg shadow-orange-500/20 hover:scale-[1.02] transition-all duration-300 relative overflow-hidden"
+                    >
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-2 mb-2">
+                                <HiAcademicCap className="w-5 h-5" />
+                                <span className="text-[10px] font-black tracking-widest uppercase opacity-80">Önerilen Kaynak</span>
+                            </div>
+                            <h4 className="font-bold text-sm leading-tight mb-1">Kiril Alfabesi</h4>
+                            <p className="text-[11px] opacity-90 font-medium">Alfabeyi detaylı öğrenmek için ziyaret et.</p>
                         </div>
-                        <h4 className="font-bold text-sm leading-tight mb-1">Kiril Alfabesi</h4>
-                        <p className="text-[11px] opacity-90 font-medium">Alfabeyi detaylı öğrenmek için ziyaret et.</p>
-                    </div>
-                    {/* Decorative element */}
-                    <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500" />
-                </a>
-            </div>
+                        {/* Decorative element */}
+                        <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500" />
+                    </a>
+                </div>
+            )}
 
             {/* Footer */}
             <div className="p-4 mt-auto border-t-2 border-slate-100 dark:border-white/5 pt-6 space-y-1">

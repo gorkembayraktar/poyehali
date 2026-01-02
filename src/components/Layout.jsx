@@ -66,11 +66,12 @@ function Layout({ children }) {
 
                   <div className="w-px h-6 bg-slate-200 dark:bg-slate-700/50 mx-1"></div>
 
+                  {/* GitHub Hidden on Mobile Header */}
                   <a
                     href="https://github.com/gorkembayraktar/poyehali"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
+                    className="hidden p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
                   >
                     <FaGithub className="w-5 h-5" />
                   </a>
