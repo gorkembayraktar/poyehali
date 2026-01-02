@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { HiFire, HiSparkles, HiSun, HiMoon, HiShare } from 'react-icons/hi2'
+import { HiFire, HiSparkles, HiSun, HiMoon, HiShare, HiBars3 } from 'react-icons/hi2'
 import { FaXTwitter, FaGithub } from 'react-icons/fa6'
 import Sidebar from './Sidebar'
 import RightSidebar from './RightSidebar'
@@ -16,10 +16,38 @@ function Layout({ children }) {
   const { streak, totalXP } = useProgress()
   const { theme, toggleTheme } = useTheme()
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [location.pathname])
+
+  const menuActions = [
+    {
+      label: 'Başarıyı Paylaş',
+      icon: HiShare,
+      onClick: () => { setIsShareModalOpen(true); setIsActionMenuOpen(false); },
+      color: 'text-orange-500'
+    },
+    {
+      label: 'GitHub',
+      icon: FaGithub,
+      href: 'https://github.com/gorkembayraktar/poyehali',
+      color: 'text-slate-700 dark:text-slate-200'
+    },
+    {
+      label: 'X (Twitter)',
+      icon: FaXTwitter,
+      href: 'https://x.com',
+      color: 'text-slate-700 dark:text-slate-200'
+    },
+    {
+      label: theme === 'light' ? 'Koyu Tema' : 'Açık Tema',
+      icon: theme === 'light' ? HiMoon : HiSun,
+      onClick: () => { toggleTheme(); setIsActionMenuOpen(false); },
+      color: 'text-slate-700 dark:text-slate-200'
+    }
+  ]
 
   return (
     <div className="min-h-screen relative bg-slate-50 dark:bg-[#121212] transition-colors duration-500">
@@ -54,44 +82,71 @@ function Layout({ children }) {
                   <HiSparkles className="w-5 h-5 text-orange-500" />
                   <span className="font-bold text-sm text-slate-700 dark:text-slate-200">{totalXP}</span>
                 </div>
-                <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
 
-                <div className="flex items-center gap-2">
+                <div className="relative">
                   <button
-                    onClick={() => setIsShareModalOpen(true)}
-                    className="p-2 rounded-lg bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 active:scale-90 transition-all"
+                    onClick={() => setIsActionMenuOpen(!isActionMenuOpen)}
+                    className={`
+                      p-2 rounded-xl transition-all active:scale-95
+                      ${isActionMenuOpen
+                        ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30'
+                        : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400'
+                      }
+                    `}
                   >
-                    <HiShare className="w-5 h-5" />
+                    <HiBars3 className="w-5 h-5" />
                   </button>
 
-                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-700/50 mx-1"></div>
+                  <AnimatePresence>
+                    {isActionMenuOpen && (
+                      <>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          onClick={() => setIsActionMenuOpen(false)}
+                          className="fixed inset-0 z-[100]"
+                        />
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95, y: 10, x: 10 }}
+                          animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: 10, x: 10 }}
+                          className="absolute right-0 mt-2 w-52 py-2 z-[110] rounded-2xl shadow-2xl border border-orange-500/20 dark:border-orange-500/10 overflow-hidden"
+                        >
+                          {/* Rich Background with Strong Brand Color */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-orange-600 to-amber-600 dark:from-orange-500 dark:to-orange-700" />
+                          <div className="absolute inset-0 bg-black/5 pointer-events-none" />
 
-                  {/* GitHub Hidden on Mobile Header */}
-                  <a
-                    href="https://github.com/gorkembayraktar/poyehali"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hidden p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
-                  >
-                    <FaGithub className="w-5 h-5" />
-                  </a>
-                  <a
-                    href="https://x.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
-                  >
-                    <FaXTwitter className="w-5 h-5" />
-                  </a>
-
-                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-700/50 mx-1"></div>
-
-                  <button
-                    onClick={toggleTheme}
-                    className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
-                  >
-                    {theme === 'light' ? <HiMoon className="w-5 h-5" /> : <HiSun className="w-5 h-5" />}
-                  </button>
+                          <div className="relative z-10">
+                            {menuActions.map((action, idx) => (
+                              <div key={idx}>
+                                {action.href ? (
+                                  <a
+                                    href={action.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors"
+                                  >
+                                    <action.icon className="w-5 h-5 text-white" />
+                                    <span className="text-sm font-bold text-white">{action.label}</span>
+                                  </a>
+                                ) : (
+                                  <button
+                                    onClick={action.onClick}
+                                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-left"
+                                  >
+                                    <action.icon className="w-5 h-5 text-white" />
+                                    <span className="text-sm font-bold text-white">{action.label}</span>
+                                  </button>
+                                )}
+                                {idx === 0 && <div className="mx-2 my-1 h-px bg-white/20" />}
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
