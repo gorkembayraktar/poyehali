@@ -66,7 +66,7 @@ function LearningPath() {
                 animate={{ opacity: 1, y: 0 }}
                 className="sticky top-24 md:top-4 z-30 mb-8 px-4 md:px-0"
             >
-                <div className="glass-card rounded-2xl p-4 mx-auto max-w-lg border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="glass-card rounded-2xl p-4 mx-auto max-w-lg border border-slate-200 dark:border-white/5 shadow-sm">
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
                             <HiAcademicCap className="w-5 h-5 text-indigo-500" />
@@ -80,7 +80,7 @@ function LearningPath() {
                     </div>
 
                     {/* Progress bar */}
-                    <div className="h-3 bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden">
+                    <div className="h-3 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
                             initial={{ width: 0 }}

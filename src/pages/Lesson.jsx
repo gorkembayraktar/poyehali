@@ -318,7 +318,7 @@ function Lesson() {
                     </div>
 
                     {/* Progress bar */}
-                    <div className="h-2 bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden">
+                    <div className="h-2 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
                             initial={{ width: 0 }}

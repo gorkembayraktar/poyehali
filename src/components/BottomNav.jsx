@@ -14,7 +14,7 @@ function BottomNav() {
     ]
 
     return (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-[#0f1016] border-t border-slate-200 dark:border-slate-800 z-50 pb-safe">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-[#121212] border-t border-slate-200 dark:border-white/5 z-50 pb-safe">
             <div className="flex items-center justify-around p-2">
                 {menuItems.map((item) => {
                     const isActive = location.pathname === item.path

@@ -99,7 +99,7 @@ function PracticeCard({ item, onNext, isCorrect, onAnswer }) {
             const isSelected = selectedOption === option
             const isCorrectOption = option === item.correct
 
-            let stateClass = "bg-white/50 dark:bg-slate-800/50 border-white/40 dark:border-white/10 hover:bg-white/80 dark:hover:bg-slate-700/80 hover:shadow-lg hover:shadow-indigo-500/10 hover:-translate-y-1"
+            let stateClass = "bg-white/50 dark:bg-white/5 border-white/40 dark:border-white/10 hover:bg-white/80 dark:hover:bg-white/10 hover:shadow-lg hover:shadow-indigo-500/10 hover:-translate-y-1"
             let icon = null
 
             if (showAnswer) {
@@ -110,7 +110,7 @@ function PracticeCard({ item, onNext, isCorrect, onAnswer }) {
                 stateClass = "bg-rose-500 border-rose-500 text-white shadow-lg shadow-rose-500/30 ring-4 ring-rose-500/20"
                 icon = <HiXCircle className="w-6 h-6" />
               } else {
-                stateClass = "opacity-40 bg-slate-100 dark:bg-slate-900 border-transparent cursor-not-allowed scale-95"
+                stateClass = "opacity-40 bg-slate-100 dark:bg-white/5 border-transparent cursor-not-allowed scale-95"
               }
             }
 

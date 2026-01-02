@@ -62,9 +62,9 @@ function PathNode({ lesson, onClick, index }) {
         switch (state) {
             case 'locked':
                 return {
-                    bg: 'bg-slate-200/80 dark:bg-slate-800/80',
-                    border: 'border-slate-300 dark:border-slate-700',
-                    text: 'text-slate-400 dark:text-slate-600',
+                    bg: 'bg-slate-200/80 dark:bg-white/5',
+                    border: 'border-slate-300 dark:border-white/5',
+                    text: 'text-slate-400 dark:text-zinc-600',
                     blur: 'opacity-50',
                     cursor: 'cursor-not-allowed'
                 }
@@ -185,7 +185,7 @@ function PathNode({ lesson, onClick, index }) {
                             ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400'
                             : score >= 80
                                 ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
-                                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400'
                         }
           `}>
                         {score}%

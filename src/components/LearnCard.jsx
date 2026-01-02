@@ -131,7 +131,7 @@ function LearnCard({ item, onNext, autoAdvanceDelay = 4000 }) {
         </div>
 
         {/* Progress Bar */}
-        <div className="absolute bottom-0 left-0 w-full h-1.5 bg-slate-100 dark:bg-slate-700/50">
+        <div className="absolute bottom-0 left-0 w-full h-1.5 bg-slate-100 dark:bg-white/5">
           <motion.div
             className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
             style={{ width: `${progress}%` }}
@@ -147,7 +147,7 @@ function LearnCard({ item, onNext, autoAdvanceDelay = 4000 }) {
           className="group flex items-center gap-2 px-6 py-3 rounded-full hover:bg-white/50 dark:hover:bg-white/5 transition-colors text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium"
         >
           <span>Sonraki Karta Geç</span>
-          <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-500/30 flex items-center justify-center transition-colors">
+          <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-500/30 flex items-center justify-center transition-colors">
             <HiChevronRight className="w-3 h-3" />
           </div>
         </motion.button>

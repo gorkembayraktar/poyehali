@@ -68,7 +68,7 @@ function RightSidebar() {
             </div>
 
             {/* Placeholder for future widgets like "Friend Updates" or "Daily Quests" */}
-            <div className="glass-card p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-800 border-dashed min-h-[200px] flex items-center justify-center text-center">
+            <div className="glass-card p-4 rounded-2xl border-2 border-slate-200 dark:border-white/5 border-dashed min-h-[200px] flex items-center justify-center text-center">
                 <div>
                     <p className="font-bold text-slate-400 dark:text-slate-500 mb-2">
                         Günlük Görevler

@@ -76,9 +76,8 @@ function CompletionScreen({ score, onRestart }) {
               cy="96"
               r="86"
               stroke="currentColor"
-              strokeWidth="12"
               fill="none"
-              className="text-slate-100 dark:text-slate-800"
+              className="text-slate-100 dark:text-white/5"
             />
             {/* Foreground Circle */}
             <motion.circle
@@ -116,11 +115,11 @@ function CompletionScreen({ score, onRestart }) {
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-10">
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
             <span className="block text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Doğru</span>
             <span className="text-2xl font-bold text-emerald-500">{score.correct}</span>
           </div>
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
             <span className="block text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Yanlış</span>
             <span className="text-2xl font-bold text-rose-500">{score.total - score.correct}</span>
           </div>

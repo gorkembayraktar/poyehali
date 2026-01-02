@@ -14,12 +14,10 @@ function Layout({ children }) {
   const { theme, toggleTheme } = useTheme()
 
   return (
-    <div className="min-h-screen relative bg-slate-50 dark:bg-[#0f1016] transition-colors duration-500">
-      {/* Background Effects */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-500/20 rounded-full blur-[120px] animate-float opacity-60 mix-blend-multiply dark:mix-blend-screen"></div>
-        <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] animate-float-delayed opacity-60 mix-blend-multiply dark:mix-blend-screen"></div>
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
+    <div className="min-h-screen relative bg-slate-50 dark:bg-[#121212] transition-colors duration-500">
+      {/* Simplified Background Overlay */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute inset-0 bg-slate-50 dark:bg-[#121212]"></div>
       </div>
 
       {/* Left Sidebar (Fixed) */}
@@ -30,9 +28,9 @@ function Layout({ children }) {
         <div className="max-w-5xl mx-auto flex justify-center items-start min-h-screen">
 
           {/* Center Column - Content */}
-          <div className="flex-1 w-full max-w-2xl relative z-10 border-r border-slate-200 dark:border-slate-800 md:border-none min-h-screen pb-24 md:pb-0">
+          <div className="flex-1 w-full max-w-2xl relative z-10 border-r border-slate-200 dark:border-white/5 md:border-none min-h-screen pb-24 md:pb-0">
             {/* Mobile Header - Only visible on small screens */}
-            <div className="md:hidden sticky top-0 z-50 p-4 bg-white/80 dark:bg-[#0f1016]/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+            <div className="md:hidden sticky top-0 z-50 p-4 bg-white/80 dark:bg-[#181818]/80 backdrop-blur-md border-b border-slate-200 dark:border-white/5 flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <img src={logo} alt="Rusça Logo" className="w-8 h-8 object-contain" />
                 <span className="font-bold text-slate-800 dark:text-white">Privet</span>
