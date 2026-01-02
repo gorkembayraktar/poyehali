@@ -141,7 +141,13 @@ function LearningPath() {
                             transition={{ delay: sectionIndex * 0.1 }}
                             className={`mb-12 ${isLocked ? 'opacity-50 grayscale-[0.5]' : ''}`}
                         >
-                            <div className="flex items-center justify-between mb-8 px-2">
+                            <div className={`
+                                sticky top-[172px] md:top-[92px] z-20 
+                                flex items-center justify-between mb-8 px-4 py-3 
+                                bg-slate-50/80 dark:bg-[#121212]/80 backdrop-blur-md 
+                                border-y border-transparent transition-all
+                                ${isLocked ? 'pointer-events-none' : ''}
+                            `}>
                                 <motion.div
                                     initial={{ x: -20, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
@@ -163,14 +169,14 @@ function LearningPath() {
                                 <button
                                     onClick={() => !isMastered && !isLocked && handleMasterSection(sectionKey, section.title)}
                                     className={`
-                                        group relative flex items-center gap-2 px-4 py-2 rounded-xl border transition-all duration-500 overflow-hidden
+                                        group relative flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all duration-500 overflow-hidden
                                         ${isMastered
                                             ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
                                             : isLocked
                                                 ? 'bg-slate-100 dark:bg-white/5 border-transparent text-slate-400 cursor-not-allowed'
                                                 : confirmingMastery === sectionKey
                                                     ? 'bg-amber-500 border-amber-500 text-white shadow-lg shadow-amber-500/20 animate-pulse'
-                                                    : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 hover:border-emerald-500 hover:text-emerald-500 dark:hover:text-emerald-400'
+                                                    : 'bg-white/50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 hover:border-emerald-500 hover:text-emerald-500 dark:hover:text-emerald-400'
                                         }
                                     `}
                                 >
