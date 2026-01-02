@@ -28,15 +28,50 @@ function Lesson() {
     // Get letters for this lesson
     const letters = useMemo(() => {
         if (!lesson) return []
+
+        // Manual letters override
         if (lesson.letters) {
             return alphabet.filter(l => lesson.letters.includes(l.letter))
         }
+
+        // Section: Alphabet logic
         if (lesson.section === 'alphabet') {
+            if (lesson.type === 'gate') {
+                return alphabet // Use all 33 letters for Alphabet Gate
+            }
             const levelMatch = lesson.id.match(/alphabet_(\d+)/)
             if (levelMatch) {
                 return getLettersByLevel(parseInt(levelMatch[1]))
             }
         }
+
+        // Section: Phonetics logic
+        if (lesson.section === 'phonetics') {
+            if (lesson.id === 'phonetic_1') {
+                // Vowels Only
+                return alphabet.filter(l => ['А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я'].includes(l.letter))
+            }
+            if (lesson.id === 'phonetic_2') {
+                // Consonants (excluding signs)
+                return alphabet.filter(l => !['А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я', 'Ъ', 'Ь'].includes(l.letter)).slice(0, 10)
+            }
+            if (lesson.id === 'phonetic_3') {
+                // Difficult sounds
+                return alphabet.filter(l => ['Ж', 'Ш', 'Щ', 'Ц', 'Ч'].includes(l.letter))
+            }
+            if (lesson.type === 'gate') {
+                return alphabet.slice(0, 20) // Mixed for phonetic gate
+            }
+        }
+
+        // Section: Confusion Mastery logic
+        if (lesson.section === 'confusion') {
+            if (lesson.confusionSet) {
+                return alphabet.filter(l => lesson.confusionSet.includes(l.letter))
+            }
+            return alphabet.filter(l => l.confusionLevel === 'critical' || l.confusionLevel === 'high')
+        }
+
         return []
     }, [lesson])
 
@@ -53,7 +88,16 @@ function Lesson() {
 
     // Generate test questions
     const testQuestions = useMemo(() => {
-        return letters.slice(0, 5).map(letter => ({
+        const isGate = lesson?.type === 'gate'
+
+        // Shuffle source letters for variety
+        const shuffled = shuffleArray(letters)
+
+        // For Alphabet Gate, use 20 randomized questions for thoroughness
+        // For normal lessons, use 5.
+        const size = isGate ? Math.min(20, shuffled.length) : Math.min(5, shuffled.length)
+
+        return shuffled.slice(0, size).map(letter => ({
             letter: letter.letter,
             correct: letter.turkish,
             options: shuffleArray([
@@ -62,7 +106,7 @@ function Lesson() {
             ]),
             questionText: `${letter.letter} harfi hangi sesi çıkarır?`
         }))
-    }, [letters])
+    }, [letters, lesson])
 
     // Generate sound match options
     const soundMatchOptions = useMemo(() => {
@@ -80,6 +124,14 @@ function Lesson() {
             navigate('/')
             return
         }
+
+        // If it's a gate, skip to test stage immediately
+        if (lesson.type === 'gate') {
+            setStage('test')
+        } else {
+            setStage('introduction')
+        }
+
         startLesson(lessonId)
     }, [lesson, lessonId, isLessonUnlocked, startLesson, navigate])
 
