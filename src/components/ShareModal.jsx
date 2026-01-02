@@ -133,8 +133,8 @@ function ShareModal({ isOpen, onClose, stats }) {
                             >
                                 {/* Header: Logo & Branding */}
                                 <div className="relative z-10 flex items-center gap-3">
-                                    <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center p-2.5 shadow-xl">
-                                        <img src={logo} alt="Poyehali" className="w-full h-full object-contain" />
+                                    <div className="w-12 h-12 flex items-center justify-center p-1">
+                                        <img src={logo} alt="Poyehali" className="w-full h-full object-contain drop-shadow-lg" />
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-black text-white tracking-tight leading-none">Poyehali</h3>

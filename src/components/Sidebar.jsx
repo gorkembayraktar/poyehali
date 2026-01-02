@@ -21,12 +21,37 @@ function Sidebar() {
     return (
         <div className={`hidden md:flex flex-col fixed left-0 top-0 h-screen border-r border-slate-200 dark:border-white/5 bg-white dark:bg-[#121212] z-[1] ${width}`}>
             {/* Logo Area */}
-            <div className="p-6 mb-4">
-                <div className="flex items-center gap-3">
-                    <img src={logo} alt="Rusça Logo" className="w-10 h-10 object-contain" />
-                    <h1 className="font-bold text-slate-800 dark:text-white text-xl tracking-tight">
-                        Poyehali
-                    </h1>
+            <div className="px-8 pt-12 pb-8 relative group flex flex-col items-center text-center">
+                {/* Architectural Background Detail */}
+                <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-orange-500/[0.04] via-orange-500/[0.01] to-transparent pointer-events-none" />
+
+                <div className="flex flex-col items-center gap-6 relative z-10 w-full">
+                    <motion.div
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        className="relative"
+                    >
+                        {/* Branding Pedestal Glow */}
+                        <div className="absolute inset-0 bg-orange-500/15 blur-3xl rounded-full scale-110 opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                        <div className="relative w-24 h-24 flex items-center justify-center">
+                            <img src={logo} alt="Poyehali" className="w-full h-full object-contain relative z-10 drop-shadow-2xl" />
+                        </div>
+                    </motion.div>
+
+                    <div className="space-y-2 w-full flex flex-col items-center">
+                        <div className="flex items-center justify-center gap-2">
+                            <h1 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white leading-none">
+                                Poyehali
+                            </h1>
+                            <div className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.6)] animate-pulse" />
+                        </div>
+                        <div className="flex items-center justify-center gap-3 w-full">
+                            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-orange-500/20 dark:to-orange-500/10" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 dark:text-zinc-500 whitespace-nowrap">
+                                Rusça Öğren
+                            </span>
+                            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-orange-500/20 dark:to-orange-500/10" />
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -82,7 +107,7 @@ function Sidebar() {
             {/* Footer */}
             <div className="p-4 mt-auto border-t-2 border-slate-100 dark:border-white/5 pt-6 space-y-1">
                 <a
-                    href="https://github.com"
+                    href="https://github.com/gorkembayraktar/poyehali"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 group"
