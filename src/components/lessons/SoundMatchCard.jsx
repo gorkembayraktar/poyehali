@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { HiSpeakerWave, HiCheckCircle, HiXCircle } from 'react-icons/hi2'
+import { HiSpeakerWave, HiCheckCircle, HiXCircle, HiSpeakerXMark } from 'react-icons/hi2'
 import { useSound } from '../../contexts/SoundContext'
 
-function SoundMatchCard({ letter, options, onAnswer, index, total }) {
+function SoundMatchCard({ letter, options, onAnswer, onSkip, index, total }) {
     const { isMuted } = useSound()
     const [selectedOption, setSelectedOption] = useState(null)
     const [showResult, setShowResult] = useState(false)
@@ -101,7 +101,7 @@ function SoundMatchCard({ letter, options, onAnswer, index, total }) {
                 </div>
 
                 {/* Options */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3 mb-6">
                     {options.map((option, i) => {
                         const isSelected = selectedOption === option
                         const isCorrectOption = option === letter.turkish
@@ -144,6 +144,17 @@ function SoundMatchCard({ letter, options, onAnswer, index, total }) {
                         )
                     })}
                 </div>
+
+                {/* Skip option */}
+                {!showResult && (
+                    <button
+                        onClick={onSkip}
+                        className="w-full py-3 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:border-slate-400 transition-all flex items-center justify-center gap-2 text-sm font-medium"
+                    >
+                        <HiSpeakerXMark className="w-4 h-4" />
+                        <span>Şu an dinleyemiyorum</span>
+                    </button>
+                )}
 
                 {/* Result feedback */}
                 {showResult && (

@@ -10,7 +10,7 @@ import IntroductionCard from '../components/lessons/IntroductionCard'
 import SoundMatchCard from '../components/lessons/SoundMatchCard'
 import ConfusionCard from '../components/lessons/ConfusionCard'
 import TestCard from '../components/lessons/TestCard'
-import { numbers, colors, dailyWords } from '../data/vocabulary'
+import { numbers, colors, dailyWords, simplePhrases } from '../data/vocabulary'
 
 // Stages in order
 const STAGES = ['introduction', 'sound_match', 'confusion', 'test']
@@ -75,12 +75,13 @@ function Lesson() {
         }
 
         // Section: Vocabulary logic
-        if (lesson.section === 'vocabulary') {
+        if (lesson.section === 'vocabulary' || lesson.section === 'practice') {
             let source = []
             if (lesson.id === 'numbers_1') source = numbers.slice(0, 10)
             if (lesson.id === 'numbers_2') source = numbers.slice(10)
             if (lesson.id === 'colors') source = colors
             if (lesson.id === 'daily_words') source = dailyWords
+            if (lesson.id === 'simple_phrases') source = simplePhrases
 
             // Normalize vocabulary data to match letter structure
             return source.map(item => ({
@@ -98,7 +99,7 @@ function Lesson() {
 
     // Get confusion items for this lesson
     const confusions = useMemo(() => {
-        if (!lesson || lesson.section === 'vocabulary') return []
+        if (!lesson || lesson.section === 'vocabulary' || lesson.section === 'practice') return []
         // For alphabet lessons, use critical confusions from current letters
         const criticalLetters = letters.filter(l => l.confusionLevel === 'critical' || l.confusionLevel === 'high')
         return criticalLetters.map(l => {
@@ -215,6 +216,19 @@ function Lesson() {
         })
 
         handleNext(newAnswers)
+    }
+
+    // Handle skip stage
+    const handleSkipStage = () => {
+        const currentStageIndex = STAGES.indexOf(stage)
+        if (currentStageIndex < STAGES.length - 1) {
+            const nextStage = STAGES[currentStageIndex + 1]
+            if (nextStage === 'confusion' && confusions.length === 0) {
+                setStage('test')
+            } else {
+                setStage(nextStage)
+            }
+        }
     }
 
     // Calculate and complete lesson
@@ -440,6 +454,7 @@ function Lesson() {
                                 ...getRandomOptionsForContext(currentItem, letters, 3)
                             ])}
                             onAnswer={handleAnswer}
+                            onSkip={handleSkipStage}
                             index={stageIndex}
                             total={letters.length}
                         />

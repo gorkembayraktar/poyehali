@@ -11,6 +11,13 @@ function TestCard({ question, onAnswer, index, total, isGate = false }) {
 
         setSelectedOption(option)
         setShowResult(true)
+
+        const correct = option === question.correct
+
+        // Auto-advance after delay
+        setTimeout(() => {
+            onAnswer(correct)
+        }, correct ? 1000 : 2000)
     }
 
     const handleNext = () => {

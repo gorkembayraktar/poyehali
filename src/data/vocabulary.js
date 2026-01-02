@@ -47,3 +47,16 @@ export const dailyWords = [
   { russian: 'хлеб', transcription: 'khleb', correct: 'Ekmek', options: ['Ekmek', 'Su', 'Elma', 'Kitap'] },
   { russian: 'яблоко', transcription: 'yabloko', correct: 'Elma', options: ['Elma', 'Ekmek', 'Su', 'Kitap'] },
 ]
+
+export const simplePhrases = [
+  { russian: 'Меня зовут...', transcription: 'Menya zovut...', correct: 'Benim adım...', options: ['Benim adım...', 'Onun adı...', 'Senin adın...', 'Nasılsın?'] },
+  { russian: 'Как дела?', transcription: 'Kak dela?', correct: 'Nasılsın?', options: ['Nasılsın?', 'İyiyim', 'Adın ne?', 'Nereye gidiyorsun?'] },
+  { russian: 'Я не понимаю', transcription: 'Ya ne ponimayu', correct: 'Anlamıyorum', options: ['Anlamıyorum', 'Biliyorum', 'Anlıyorum', 'Bilmiyorum'] },
+  { russian: 'Где это?', transcription: 'Gde eto?', correct: 'Bu nerede?', options: ['Bu nerede?', 'Bu nedir?', 'O kim?', 'Ne zaman?'] },
+  { russian: 'Что это?', transcription: 'Chto eto?', correct: 'Bu nedir?', options: ['Bu nedir?', 'Bu nerede?', 'Ne kadar?', 'Kim o?'] },
+  { russian: 'Сколько стоит?', transcription: 'Skolko stoit?', correct: 'Ne kadar?', options: ['Ne kadar?', 'Kaç tane?', 'Nerede?', 'Saat kaç?'] },
+  { russian: 'Все хорошо', transcription: 'Vse khorosho', correct: 'Her şey yolunda', options: ['Her şey yolunda', 'Kötü', 'Belki', 'Tamam'] },
+  { russian: 'До свидания', transcription: 'Do svidaniya', correct: 'Hoşçakal', options: ['Hoşçakal', 'Merhaba', 'Lütfen', 'Evet'] },
+  { russian: 'Приятного аппетита', transcription: 'Priyatnogo appetita', correct: 'Afiyet olsun', options: ['Afiyet olsun', 'Teşekkürler', 'İyi geceler', 'Günaydın'] },
+  { russian: 'Я тебя люблю', transcription: 'Ya tebya lyublyu', correct: 'Seni seviyorum', options: ['Seni seviyorum', 'Seni özledim', 'Nasılsın?', 'Görüşürüz'] },
+]
