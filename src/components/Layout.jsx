@@ -1,17 +1,20 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { HiFire, HiSparkles, HiSun, HiMoon } from 'react-icons/hi2'
+import { HiFire, HiSparkles, HiSun, HiMoon, HiShare } from 'react-icons/hi2'
 import Sidebar from './Sidebar'
 import RightSidebar from './RightSidebar'
 import BottomNav from './BottomNav'
 import logo from '../assets/logo.png'
 import { useProgress } from '../contexts/ProgressContext'
 import { useTheme } from '../contexts/ThemeContext'
+import { useState } from 'react'
+import ShareModal from './ShareModal'
 
 function Layout({ children }) {
   const location = useLocation()
   const { streak, totalXP } = useProgress()
   const { theme, toggleTheme } = useTheme()
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false)
 
   return (
     <div className="min-h-screen relative bg-slate-50 dark:bg-[#121212] transition-colors duration-500">
@@ -47,12 +50,21 @@ function Layout({ children }) {
                   <span className="font-bold text-sm text-slate-700 dark:text-slate-200">{totalXP}</span>
                 </div>
                 <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
-                <button
-                  onClick={toggleTheme}
-                  className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
-                >
-                  {theme === 'light' ? <HiMoon className="w-5 h-5" /> : <HiSun className="w-5 h-5" />}
-                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setIsShareModalOpen(true)}
+                    className="p-2 rounded-lg bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20 active:scale-90 transition-all"
+                  >
+                    <HiShare className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={toggleTheme}
+                    className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
+                  >
+                    {theme === 'light' ? <HiMoon className="w-5 h-5" /> : <HiSun className="w-5 h-5" />}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -79,6 +91,13 @@ function Layout({ children }) {
 
       {/* Mobile Bottom Navigation */}
       <BottomNav />
+
+      {/* Shared Modal for Mobile */}
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        stats={{ streak: streak.current, totalXP }}
+      />
     </div>
   )
 }

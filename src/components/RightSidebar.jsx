@@ -1,11 +1,14 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { HiFire, HiSparkles, HiSun, HiMoon } from 'react-icons/hi2'
+import { HiFire, HiSparkles, HiSun, HiMoon, HiShare } from 'react-icons/hi2'
 import { useProgress } from '../contexts/ProgressContext'
 import { useTheme } from '../contexts/ThemeContext'
+import ShareModal from './ShareModal'
 
 function RightSidebar() {
     const { streak, totalXP } = useProgress()
     const { theme, toggleTheme } = useTheme()
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false)
 
     return (
         <div className="hidden lg:flex flex-col w-80 sticky top-0 h-screen p-6 gap-6 z-40">
@@ -25,6 +28,29 @@ function RightSidebar() {
                     <span className="font-black text-slate-700 dark:text-slate-200">
                         {totalXP} XP
                     </span>
+                </div>
+            </div>
+
+            {/* Share Widget */}
+            <div className="relative group overflow-hidden glass-card p-5 rounded-3xl border border-indigo-500/20 dark:border-indigo-500/10">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 blur-2xl -mr-12 -mt-12 rounded-full group-hover:bg-indigo-500/20 transition-colors" />
+
+                <div className="relative flex flex-col gap-4">
+                    <div className="flex items-center gap-3 text-indigo-500 dark:text-indigo-400">
+                        <div className="p-2 rounded-xl bg-indigo-500/10">
+                            <HiShare className="w-5 h-5" />
+                        </div>
+                        <span className="font-bold">Başarılarını Paylaş</span>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Topladığın XP ve serini arkadaşlarına göstererek onlara meydan oku!
+                    </p>
+                    <button
+                        onClick={() => setIsShareModalOpen(true)}
+                        className="w-full py-2.5 rounded-xl bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:bg-indigo-600 active:scale-95 transition-all"
+                    >
+                        Şimdi Paylaş
+                    </button>
                 </div>
             </div>
 
@@ -56,9 +82,9 @@ function RightSidebar() {
                     </div>
 
                     <div className={`
-            w-10 h-6 rounded-full p-1 transition-colors duration-200
-            ${theme === 'dark' ? 'bg-indigo-500' : 'bg-slate-300'}
-          `}>
+                        w-10 h-6 rounded-full p-1 transition-colors duration-200
+                        ${theme === 'dark' ? 'bg-indigo-500' : 'bg-slate-300'}
+                    `}>
                         <motion.div
                             animate={{ x: theme === 'dark' ? 16 : 0 }}
                             className="w-4 h-4 rounded-full bg-white shadow-sm"
@@ -68,17 +94,22 @@ function RightSidebar() {
             </div>
 
             {/* Placeholder for future widgets like "Friend Updates" or "Daily Quests" */}
-            <div className="glass-card p-4 rounded-2xl border-2 border-slate-200 dark:border-white/5 border-dashed min-h-[200px] flex items-center justify-center text-center">
+            <div className="glass-card p-4 rounded-2xl border-2 border-slate-200 dark:border-white/5 border-dashed min-h-[150px] flex items-center justify-center text-center">
                 <div>
-                    <p className="font-bold text-slate-400 dark:text-slate-500 mb-2">
+                    <p className="font-bold text-slate-400 dark:text-slate-500 mb-2 text-sm">
                         Günlük Görevler
                     </p>
-                    <p className="text-xs text-slate-400">
-                        Yakında gelecek...
+                    <p className="text-[10px] text-slate-400 px-4">
+                        Çok yakında burada günlük görevlerin yer alacak...
                     </p>
                 </div>
             </div>
 
+            <ShareModal
+                isOpen={isShareModalOpen}
+                onClose={() => setIsShareModalOpen(false)}
+                stats={{ streak: streak.current, totalXP }}
+            />
         </div>
     )
 }

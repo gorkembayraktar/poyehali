@@ -18,7 +18,7 @@ function Sidebar() {
     ]
 
     return (
-        <div className={`hidden md:flex flex-col fixed left-0 top-0 h-screen border-r border-slate-200 dark:border-white/5 bg-white dark:bg-[#121212] z-50 ${width}`}>
+        <div className={`hidden md:flex flex-col fixed left-0 top-0 h-screen border-r border-slate-200 dark:border-white/5 bg-white dark:bg-[#121212] z-[1] ${width}`}>
             {/* Logo Area */}
             <div className="p-6 mb-4">
                 <div className="flex items-center gap-3">
