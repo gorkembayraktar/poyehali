@@ -8,6 +8,7 @@ const STORAGE_KEY = 'russian_learning_progress'
 // Initial progress state
 const initialProgress = {
     completedLessons: {}, // { lessonId: { score, completedAt, attempts } }
+    masteredSections: {}, // { sectionId: true }
     currentLesson: 'alphabet_1',
     gateScores: {},
     lessonProgress: {}, // { lessonId: { stage, stageIndex, answers } }
@@ -25,7 +26,8 @@ export function ProgressProvider({ children }) {
             const saved = localStorage.getItem(STORAGE_KEY)
             if (saved) {
                 try {
-                    return JSON.parse(saved)
+                    const parsed = JSON.parse(saved)
+                    return { ...initialProgress, ...parsed }
                 } catch (e) {
                     console.error('Failed to parse progress:', e)
                 }
@@ -195,6 +197,43 @@ export function ProgressProvider({ children }) {
         return passed
     }, [])
 
+    // Master an entire section
+    const masterSection = useCallback((sectionId) => {
+        const sectionLessons = learningPath.filter(l => l.section === sectionId)
+
+        setProgress(prev => {
+            const newProgress = { ...prev }
+            const now = new Date().toISOString()
+
+            // Mark all lessons as completed
+            sectionLessons.forEach(lesson => {
+                if (!newProgress.completedLessons[lesson.id]) {
+                    newProgress.completedLessons[lesson.id] = {
+                        score: 100,
+                        passed: true,
+                        completedAt: now,
+                        attempts: 1,
+                        isAutoMastered: true
+                    }
+
+                    if (lesson.type === 'gate') {
+                        newProgress.gateScores[lesson.id] = 100
+                    }
+
+                    // Award some XP
+                    newProgress.totalXP += 25
+                }
+            })
+
+            newProgress.masteredSections = {
+                ...prev.masteredSections,
+                [sectionId]: true
+            }
+
+            return newProgress
+        })
+    }, [])
+
     // Reset all progress
     const resetProgress = useCallback(() => {
         setProgress(initialProgress)
@@ -227,11 +266,13 @@ export function ProgressProvider({ children }) {
         startLesson,
         updateLessonProgress,
         completeLesson,
+        masterSection,
         resetProgress,
         getOverallProgress,
         getSectionProgress,
         streak: progress.streak,
-        totalXP: progress.totalXP
+        totalXP: progress.totalXP,
+        masteredSections: progress.masteredSections
     }
 
     return (

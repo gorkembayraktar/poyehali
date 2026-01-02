@@ -1,54 +1,77 @@
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { HiSparkles, HiFire, HiAcademicCap, HiBookOpen, HiSpeakerWave, HiExclamationTriangle, HiCalculator, HiSwatch, HiChatBubbleLeftRight, HiArrowPath, HiBolt, HiTrophy } from 'react-icons/hi2'
+import { HiSparkles, HiFire, HiAcademicCap, HiBookOpen, HiSpeakerWave, HiExclamationTriangle, HiCalculator, HiSwatch, HiChatBubbleLeftRight, HiArrowPath, HiBolt, HiTrophy, HiCheck, HiLockClosed } from 'react-icons/hi2'
 import { learningPath, sections } from '../../data/learningPath'
+import { lessonIcons, sectionIcons } from '../../constants/icons'
 import { useProgress } from '../../contexts/ProgressContext'
 import PathNode from './PathNode'
 
-// Icon mapping for lessons
-export const lessonIcons = {
-    alphabet_1: HiAcademicCap,
-    alphabet_2: HiAcademicCap,
-    alphabet_3: HiAcademicCap,
-    alphabet_4: HiAcademicCap,
-    alphabet_5: HiAcademicCap,
-    alphabet_6: HiAcademicCap,
-    alphabet_gate: HiBolt,
-    phonetic_1: HiSpeakerWave,
-    phonetic_2: HiSpeakerWave,
-    phonetic_3: HiSpeakerWave,
-    phonetic_gate: HiBolt,
-    confusion_1: HiExclamationTriangle,
-    confusion_2: HiExclamationTriangle,
-    confusion_3: HiExclamationTriangle,
-    master_gate: HiTrophy,
-    numbers_1: HiCalculator,
-    numbers_2: HiCalculator,
-    colors: HiSwatch,
-    daily_words: HiBookOpen,
-    simple_phrases: HiChatBubbleLeftRight,
-    daily_loop: HiArrowPath
-}
-
-// Section icons
-export const sectionIcons = {
-    alphabet: HiAcademicCap,
-    phonetics: HiSpeakerWave,
-    confusion: HiExclamationTriangle,
-    vocabulary: HiBookOpen,
-    practice: HiArrowPath
-}
-
 function LearningPath() {
     const navigate = useNavigate()
-    const { getLessonState, getOverallProgress, streak } = useProgress()
+    const { getLessonState, getOverallProgress, streak, masterSection, masteredSections, getActiveLesson } = useProgress()
     const overallProgress = getOverallProgress()
+    const activeLesson = getActiveLesson()
+    const activeNodeRef = useRef(null)
+
+    const [confirmingMastery, setConfirmingMastery] = useState(null)
+
+    // Auto-scroll logic
+    useEffect(() => {
+        // Prevent browser's default scroll restoration to avoid conflicts
+        if ('scrollRestoration' in window.history) {
+            window.history.scrollRestoration = 'manual'
+        }
+
+        const savedScrollPos = sessionStorage.getItem('path_scroll_pos')
+
+        if (savedScrollPos) {
+            const pos = parseInt(savedScrollPos)
+            const timer = setTimeout(() => {
+                window.scrollTo(0, pos)
+                // We keep the item for a bit longer to handle React StrictMode double-mount in dev
+                // It will be cleared on the next fresh entry or after 1 second
+                setTimeout(() => sessionStorage.removeItem('path_scroll_pos'), 1000)
+            }, 50)
+            return () => clearTimeout(timer)
+        } else {
+            // Initial/Fresh entry: Smooth scroll to active lesson
+            const timer = setTimeout(() => {
+                if (activeNodeRef.current) {
+                    activeNodeRef.current.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    })
+                }
+            }, 600)
+            return () => clearTimeout(timer)
+        }
+
+        return () => {
+            if ('scrollRestoration' in window.history) {
+                window.history.scrollRestoration = 'auto'
+            }
+        }
+    }, [])
 
     const handleLessonClick = (lesson) => {
+        // Save scroll position for restoration when coming back
+        sessionStorage.setItem('path_scroll_pos', window.scrollY.toString())
         navigate(`/lesson/${lesson.id}`)
     }
 
-    // Group lessons by section
+    const handleMasterSection = (sectionId, title) => {
+        if (confirmingMastery === sectionId) {
+            masterSection(sectionId)
+            setConfirmingMastery(null)
+        } else {
+            setConfirmingMastery(sectionId)
+            setTimeout(() => {
+                setConfirmingMastery(prev => prev === sectionId ? null : prev)
+            }, 3000)
+        }
+    }
+
     const groupedLessons = learningPath.reduce((acc, lesson) => {
         const section = lesson.section
         if (!acc[section]) {
@@ -58,9 +81,17 @@ function LearningPath() {
         return acc
     }, {})
 
+    const sectionOrder = ['alphabet', 'phonetics', 'confusion', 'vocabulary', 'practice']
+
+    const isSectionComplete = (sectionId) => {
+        if (masteredSections && masteredSections[sectionId]) return true
+        const sectionLessons = groupedLessons[sectionId] || []
+        if (sectionLessons.length === 0) return false
+        return sectionLessons.every(l => getLessonState(l.id) === 'completed')
+    }
+
     return (
         <div className="min-h-screen pb-20">
-            {/* Header with progress */}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -79,7 +110,6 @@ function LearningPath() {
                         </span>
                     </div>
 
-                    {/* Progress bar */}
                     <div className="h-3 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
@@ -91,12 +121,17 @@ function LearningPath() {
                 </div>
             </motion.div>
 
-
-            {/* Learning Path - Zigzag Layout */}
             <div className="max-w-lg mx-auto px-4">
-                {Object.entries(groupedLessons).map(([sectionKey, sectionLessons], sectionIndex) => {
-                    const section = sections[sectionKey]
+                {sectionOrder.map((sectionKey, sectionIndex) => {
+                    const sectionLessons = groupedLessons[sectionKey] || []
+                    if (sectionLessons.length === 0) return null
+
+                    const section = (sections && sections[sectionKey]) || { title: sectionKey }
                     const SectionIcon = sectionIcons[sectionKey] || HiBookOpen
+                    const isMastered = isSectionComplete(sectionKey)
+
+                    const prevSectionId = sectionIndex > 0 ? sectionOrder[sectionIndex - 1] : null
+                    const isLocked = prevSectionId ? !isSectionComplete(prevSectionId) : false
 
                     return (
                         <motion.div
@@ -104,24 +139,65 @@ function LearningPath() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: sectionIndex * 0.1 }}
-                            className="mb-12"
+                            className={`mb-12 ${isLocked ? 'opacity-50 grayscale-[0.5]' : ''}`}
                         >
-                            {/* Section Header */}
-                            <div className="text-center mb-8">
+                            <div className="flex items-center justify-between mb-8 px-2">
                                 <motion.div
-                                    initial={{ scale: 0.9, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    transition={{ delay: sectionIndex * 0.1 + 0.1 }}
-                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700"
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    className="flex items-center gap-3"
                                 >
-                                    <SectionIcon className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-                                    <span className="font-bold text-slate-700 dark:text-slate-300">
-                                        {section.title}
-                                    </span>
+                                    <div className={`p-2 rounded-xl ${isMastered ? 'bg-emerald-500 text-white' : 'bg-slate-100 dark:bg-white/5 text-slate-500'}`}>
+                                        <SectionIcon className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-slate-800 dark:text-white leading-tight">
+                                            {section.title}
+                                        </h3>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                            {sectionLessons.length} Ders • {isMastered ? 'Tamamlandı' : isLocked ? 'Kilitli' : 'Devam Ediyor'}
+                                        </p>
+                                    </div>
                                 </motion.div>
+
+                                <button
+                                    onClick={() => !isMastered && !isLocked && handleMasterSection(sectionKey, section.title)}
+                                    className={`
+                                        group relative flex items-center gap-2 px-4 py-2 rounded-xl border transition-all duration-500 overflow-hidden
+                                        ${isMastered
+                                            ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                                            : isLocked
+                                                ? 'bg-slate-100 dark:bg-white/5 border-transparent text-slate-400 cursor-not-allowed'
+                                                : confirmingMastery === sectionKey
+                                                    ? 'bg-amber-500 border-amber-500 text-white shadow-lg shadow-amber-500/20 animate-pulse'
+                                                    : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 hover:border-emerald-500 hover:text-emerald-500 dark:hover:text-emerald-400'
+                                        }
+                                    `}
+                                >
+                                    {(isMastered || (confirmingMastery === sectionKey && !isLocked)) && (
+                                        <motion.div
+                                            initial={{ scale: 0, opacity: 0 }}
+                                            animate={{ scale: 1, opacity: 1 }}
+                                            className={`absolute inset-0 -z-10 ${isMastered ? 'bg-gradient-to-r from-emerald-600 to-emerald-400' : 'bg-amber-500'}`}
+                                        />
+                                    )}
+
+                                    {isLocked ? (
+                                        <HiLockClosed className="w-4 h-4" />
+                                    ) : (
+                                        <HiCheck className={`w-4 h-4 transition-transform duration-500 ${(isMastered || confirmingMastery === sectionKey) ? 'scale-125' : 'group-hover:scale-110'}`} />
+                                    )}
+
+                                    <span className="text-xs font-black uppercase tracking-widest">
+                                        {isMastered ? 'BİLDİĞİM' : isLocked ? 'KİLİTLİ' : confirmingMastery === sectionKey ? 'EMİN MİSİN?' : 'BİLİYORUM'}
+                                    </span>
+
+                                    {!isMastered && !isLocked && confirmingMastery !== sectionKey && (
+                                        <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                    )}
+                                </button>
                             </div>
 
-                            {/* Zigzag Path */}
                             <div className="relative">
                                 {sectionLessons.map((lesson, lessonIndex) => {
                                     const globalIndex = learningPath.findIndex(l => l.id === lesson.id)
@@ -129,13 +205,16 @@ function LearningPath() {
                                     const nextLesson = sectionLessons[lessonIndex + 1]
                                     const nextState = nextLesson ? getLessonState(nextLesson.id) : null
 
-                                    // Zigzag: alternate left and right
                                     const isLeft = lessonIndex % 2 === 0
                                     const isLast = lessonIndex === sectionLessons.length - 1
+                                    const isActive = lesson.id === activeLesson?.id
 
                                     return (
-                                        <div key={lesson.id} className="relative">
-                                            {/* Node Row */}
+                                        <div
+                                            key={lesson.id}
+                                            className="relative"
+                                            ref={isActive ? activeNodeRef : null}
+                                        >
                                             <div className={`flex items-center ${isLeft ? 'justify-start' : 'justify-end'}`}>
                                                 <div className={`${isLeft ? 'ml-8 md:ml-16' : 'mr-8 md:mr-16'}`}>
                                                     <PathNode
@@ -146,7 +225,6 @@ function LearningPath() {
                                                 </div>
                                             </div>
 
-                                            {/* Curved Connector to Next */}
                                             {!isLast && (
                                                 <svg
                                                     className="w-full h-24 overflow-visible"
@@ -164,7 +242,6 @@ function LearningPath() {
                                                         strokeLinecap="round"
                                                         className="dark:stroke-slate-600 drop-shadow-sm"
                                                     />
-                                                    {/* Animated dot for active connection */}
                                                     {currentState === 'completed' && (nextState === 'active' || nextState === 'in_progress') && (
                                                         <motion.circle
                                                             r="6"
@@ -190,8 +267,7 @@ function LearningPath() {
                                 })}
                             </div>
 
-                            {/* Section divider */}
-                            {sectionIndex < Object.keys(groupedLessons).length - 1 && (
+                            {sectionIndex < sectionOrder.length - 1 && (
                                 <div className="flex justify-center py-6">
                                     <div className="flex flex-col items-center gap-1">
                                         <div className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600" />
@@ -203,8 +279,6 @@ function LearningPath() {
                     )
                 })}
             </div>
-
-            {/* Bottom spacing */}
             <div className="h-20" />
         </div>
     )

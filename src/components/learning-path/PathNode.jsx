@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { HiLockClosed, HiCheck, HiSparkles } from 'react-icons/hi2'
 import { useProgress } from '../../contexts/ProgressContext'
-import { lessonIcons } from './LearningPath'
+import { lessonIcons } from '../../constants/icons'
 
 const colorClasses = {
     indigo: {
