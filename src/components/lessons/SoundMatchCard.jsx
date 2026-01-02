@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { HiSpeakerWave, HiCheckCircle, HiXCircle } from 'react-icons/hi2'
+import { useSound } from '../../contexts/SoundContext'
 
 function SoundMatchCard({ letter, options, onAnswer, index, total }) {
+    const { isMuted } = useSound()
     const [selectedOption, setSelectedOption] = useState(null)
     const [showResult, setShowResult] = useState(false)
     const [isPlaying, setIsPlaying] = useState(false)
 
     const playSound = () => {
         if ('speechSynthesis' in window) {
+            if (isMuted) return
             setIsPlaying(true)
 
             const utterance = new SpeechSynthesisUtterance(letter.letter)

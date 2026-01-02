@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { HiArrowLeft, HiXMark } from 'react-icons/hi2'
-import { getLessonById } from '../data/learningPath'
-import { getLettersByLevel, confusionSets, alphabet } from '../data/alphabet'
+import { HiXMark, HiTrophy, HiSparkles, HiStar, HiBolt, HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2'
+import { alphabet, getLettersByLevel, confusionSets } from '../data/alphabet'
+import { learningPath, getLessonById } from '../data/learningPath'
 import { useProgress } from '../contexts/ProgressContext'
+import { useSound } from '../contexts/SoundContext'
 import IntroductionCard from '../components/lessons/IntroductionCard'
 import SoundMatchCard from '../components/lessons/SoundMatchCard'
 import ConfusionCard from '../components/lessons/ConfusionCard'
@@ -355,6 +356,8 @@ function Lesson() {
         )
     }
 
+    const { isMuted, toggleSound } = useSound()
+
     // Get stage progress
     const totalStages = STAGES.filter(s => s !== 'confusion' || confusions.length > 0).length
     const currentStageNum = STAGES.slice(0, STAGES.indexOf(stage) + 1).filter(s => s !== 'confusion' || confusions.length > 0).length
@@ -383,8 +386,23 @@ function Lesson() {
                             </span>
                         </div>
 
-                        <div className="text-xs font-mono text-slate-400">
-                            {currentStageNum}/{totalStages}
+                        <div className="flex items-center gap-2">
+                            <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={toggleSound}
+                                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
+                                title={isMuted ? "Sesi Aç" : "Sesi Kapat"}
+                            >
+                                {isMuted ? (
+                                    <HiSpeakerXMark className="w-5 h-5 text-rose-500" />
+                                ) : (
+                                    <HiSpeakerWave className="w-5 h-5 text-orange-500" />
+                                )}
+                            </motion.button>
+                            <div className="text-xs font-mono text-slate-400">
+                                {currentStageNum}/{totalStages}
+                            </div>
                         </div>
                     </div>
 

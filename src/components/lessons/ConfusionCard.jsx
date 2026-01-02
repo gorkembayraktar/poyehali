@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { HiExclamationTriangle, HiCheckCircle, HiXCircle, HiSpeakerWave } from 'react-icons/hi2'
+import { useSound } from '../../contexts/SoundContext'
 
 function ConfusionCard({ confusion, onAnswer, index, total }) {
+    const { isMuted } = useSound()
     const [selectedOption, setSelectedOption] = useState(null)
     const [showResult, setShowResult] = useState(false)
 
@@ -23,6 +25,7 @@ function ConfusionCard({ confusion, onAnswer, index, total }) {
 
     const playSound = () => {
         if ('speechSynthesis' in window) {
+            if (isMuted) return
             const utterance = new SpeechSynthesisUtterance(confusion.russian)
             utterance.lang = 'ru-RU'
             utterance.rate = 0.6

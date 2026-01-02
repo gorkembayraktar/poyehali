@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiSpeakerWave, HiChevronRight, HiExclamationTriangle } from 'react-icons/hi2'
+import { useSound } from '../../contexts/SoundContext'
 
 function IntroductionCard({ letter, onNext, index, total }) {
+    const { isMuted } = useSound()
     const [isPlaying, setIsPlaying] = useState(false)
     const [hasListened, setHasListened] = useState(false)
 
     const playAudio = () => {
         if ('speechSynthesis' in window) {
+            if (isMuted) {
+                setHasListened(true)
+                return
+            }
             setIsPlaying(true)
             setHasListened(true)
 
