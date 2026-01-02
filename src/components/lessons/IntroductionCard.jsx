@@ -66,9 +66,21 @@ function IntroductionCard({ letter, onNext, index, total }) {
                             }
             `}
                     >
-                        <span className="text-7xl font-black text-gradient">
-                            {letter.letter}
-                        </span>
+                        <div className="flex flex-col items-center">
+                            {letter.visual && (
+                                letter.visual.startsWith('#') ? (
+                                    <div
+                                        className="w-8 h-8 rounded-full mb-2 shadow-inner border border-white/20"
+                                        style={{ backgroundColor: letter.visual }}
+                                    />
+                                ) : (
+                                    <span className="text-2xl opacity-50 mb-1 font-bold">{letter.visual}</span>
+                                )
+                            )}
+                            <span className={`font-black text-gradient leading-none ${letter.letter.length > 5 ? 'text-4xl' : letter.letter.length > 2 ? 'text-5xl' : 'text-7xl'}`}>
+                                {letter.letter}
+                            </span>
+                        </div>
 
                         {/* Audio wave animation */}
                         {isPlaying && (

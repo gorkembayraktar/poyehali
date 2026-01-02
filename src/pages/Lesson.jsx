@@ -9,6 +9,7 @@ import IntroductionCard from '../components/lessons/IntroductionCard'
 import SoundMatchCard from '../components/lessons/SoundMatchCard'
 import ConfusionCard from '../components/lessons/ConfusionCard'
 import TestCard from '../components/lessons/TestCard'
+import { numbers, colors, dailyWords } from '../data/vocabulary'
 
 // Stages in order
 const STAGES = ['introduction', 'sound_match', 'confusion', 'test']
@@ -72,12 +73,31 @@ function Lesson() {
             return alphabet.filter(l => l.confusionLevel === 'critical' || l.confusionLevel === 'high')
         }
 
+        // Section: Vocabulary logic
+        if (lesson.section === 'vocabulary') {
+            let source = []
+            if (lesson.id === 'numbers_1') source = numbers.slice(0, 10)
+            if (lesson.id === 'numbers_2') source = numbers.slice(10)
+            if (lesson.id === 'colors') source = colors
+            if (lesson.id === 'daily_words') source = dailyWords
+
+            // Normalize vocabulary data to match letter structure
+            return source.map(item => ({
+                letter: item.russian,
+                turkish: item.correct,
+                sound: item.transcription,
+                transcription: item.transcription,
+                visual: item.visual,
+                isVocabulary: true
+            }))
+        }
+
         return []
     }, [lesson])
 
     // Get confusion items for this lesson
     const confusions = useMemo(() => {
-        if (!lesson) return []
+        if (!lesson || lesson.section === 'vocabulary') return []
         // For alphabet lessons, use critical confusions from current letters
         const criticalLetters = letters.filter(l => l.confusionLevel === 'critical' || l.confusionLevel === 'high')
         return criticalLetters.map(l => {
@@ -90,21 +110,20 @@ function Lesson() {
     const testQuestions = useMemo(() => {
         const isGate = lesson?.type === 'gate'
 
-        // Shuffle source letters for variety
+        // Shuffle source items for variety
         const shuffled = shuffleArray(letters)
 
-        // For Alphabet Gate, use 20 randomized questions for thoroughness
-        // For normal lessons, use 5.
-        const size = isGate ? Math.min(20, shuffled.length) : Math.min(5, shuffled.length)
+        // Size logic
+        const size = isGate ? Math.min(20, shuffled.length) : Math.min(letters.length, 10)
 
-        return shuffled.slice(0, size).map(letter => ({
-            letter: letter.letter,
-            correct: letter.turkish,
+        return shuffled.slice(0, size).map(item => ({
+            letter: item.letter,
+            correct: item.turkish,
             options: shuffleArray([
-                letter.turkish,
-                ...getRandomOptions(letter.turkish, 3)
+                item.turkish,
+                ...getRandomOptionsForContext(item, letters, 3)
             ]),
-            questionText: `${letter.letter} harfi hangi sesi çıkarır?`
+            questionText: item.isVocabulary ? `"${item.letter}" ne anlama gelir?` : `${item.letter} harfi hangi sesi çıkarır?`
         }))
     }, [letters, lesson])
 
@@ -400,7 +419,7 @@ function Lesson() {
                             letter={currentItem}
                             options={shuffleArray([
                                 currentItem.turkish,
-                                ...getRandomOptions(currentItem.turkish, 3)
+                                ...getRandomOptionsForContext(currentItem, letters, 3)
                             ])}
                             onAnswer={handleAnswer}
                             index={stageIndex}
@@ -444,11 +463,22 @@ function shuffleArray(array) {
     return shuffled
 }
 
-function getRandomOptions(correct, count) {
+function getRandomOptionsForContext(item, contextItems, count) {
+    // Try to get options from the same context (e.g. other numbers)
+    const contextOptions = contextItems
+        .filter(i => i.letter !== item.letter)
+        .map(i => i.turkish)
+
+    if (contextOptions.length >= count) {
+        return shuffleArray(contextOptions).slice(0, count)
+    }
+
+    // Fallback to general alphabet distractors if context is too small
     const allOptions = ['A', 'B', 'V', 'G', 'D', 'YE', 'YO', 'ZH', 'Z', 'İ', 'Y', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'H', 'TS', 'Ç', 'Ş', 'ŞÇ', 'I', 'E', 'YU', 'YA']
-    const filtered = allOptions.filter(o => o !== correct)
+    const filtered = allOptions.filter(o => o !== item.turkish && !contextOptions.includes(o))
     const shuffled = shuffleArray(filtered)
-    return shuffled.slice(0, count)
+
+    return shuffleArray([...contextOptions, ...shuffled.slice(0, count - contextOptions.length)]).slice(0, count)
 }
 
 export default Lesson
