@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { HiHome, HiTrophy, HiBookOpen, HiShoppingBag, HiUser } from 'react-icons/hi2'
+import logo from '../assets/logo.png'
 
 function Sidebar() {
     const navigate = useNavigate()
@@ -21,11 +22,9 @@ function Sidebar() {
             {/* Logo Area */}
             <div className="p-6 mb-4">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                        <span className="text-xl">🇷🇺</span>
-                    </div>
+                    <img src={logo} alt="Rusça Logo" className="w-10 h-10 object-contain" />
                     <h1 className="font-bold text-slate-800 dark:text-white text-xl tracking-tight">
-                        Rusça
+                        Privet
                     </h1>
                 </div>
             </div>

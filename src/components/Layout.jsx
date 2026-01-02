@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from './Sidebar'
 import RightSidebar from './RightSidebar'
 import BottomNav from './BottomNav'
+import logo from '../assets/logo.png'
 
 function Layout({ children }) {
   const location = useLocation()
@@ -28,10 +29,8 @@ function Layout({ children }) {
             {/* Mobile Header - Only visible on small screens */}
             <div className="md:hidden sticky top-0 z-50 p-4 bg-white/80 dark:bg-[#0f1016]/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                  <span className="text-lg">🇷🇺</span>
-                </div>
-                <span className="font-bold text-slate-800 dark:text-white">Rusça</span>
+                <img src={logo} alt="Rusça Logo" className="w-8 h-8 object-contain" />
+                <span className="font-bold text-slate-800 dark:text-white">Privet</span>
               </div>
             </div>
 
