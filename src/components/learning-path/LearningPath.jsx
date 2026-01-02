@@ -64,7 +64,7 @@ function LearningPath() {
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="sticky top-4 z-30 mb-8 px-4 md:px-0"
+                className="sticky top-24 md:top-4 z-30 mb-8 px-4 md:px-0"
             >
                 <div className="glass-card rounded-2xl p-4 mx-auto max-w-lg border border-slate-200 dark:border-slate-800 shadow-sm">
                     <div className="flex items-center justify-between mb-3">

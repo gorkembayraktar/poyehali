@@ -1,12 +1,17 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { HiFire, HiSparkles, HiSun, HiMoon } from 'react-icons/hi2'
 import Sidebar from './Sidebar'
 import RightSidebar from './RightSidebar'
 import BottomNav from './BottomNav'
 import logo from '../assets/logo.png'
+import { useProgress } from '../contexts/ProgressContext'
+import { useTheme } from '../contexts/ThemeContext'
 
 function Layout({ children }) {
   const location = useLocation()
+  const { streak, totalXP } = useProgress()
+  const { theme, toggleTheme } = useTheme()
 
   return (
     <div className="min-h-screen relative bg-slate-50 dark:bg-[#0f1016] transition-colors duration-500">
@@ -31,6 +36,25 @@ function Layout({ children }) {
               <div className="flex items-center gap-2">
                 <img src={logo} alt="Rusça Logo" className="w-8 h-8 object-contain" />
                 <span className="font-bold text-slate-800 dark:text-white">Privet</span>
+              </div>
+
+              {/* Mobile Stats & Toggle */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1">
+                  <HiFire className="w-5 h-5 text-orange-500" />
+                  <span className="font-bold text-sm text-slate-700 dark:text-slate-200">{streak.current}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <HiSparkles className="w-5 h-5 text-indigo-500" />
+                  <span className="font-bold text-sm text-slate-700 dark:text-slate-200">{totalXP}</span>
+                </div>
+                <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+                <button
+                  onClick={toggleTheme}
+                  className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
+                >
+                  {theme === 'light' ? <HiMoon className="w-5 h-5" /> : <HiSun className="w-5 h-5" />}
+                </button>
               </div>
             </div>
 
