@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { HiHome, HiTrophy, HiBookOpen, HiShoppingBag, HiUser } from 'react-icons/hi2'
+import { FaXTwitter, FaGithub } from 'react-icons/fa6'
 import logo from '../assets/logo.png'
 
 function Sidebar() {
@@ -56,7 +57,31 @@ function Sidebar() {
                     )
                 })}
             </nav>
-
+            {/* Footer */}
+            <div className="p-4 mt-auto border-t-2 border-slate-100 dark:border-white/5 pt-6 space-y-1">
+                <a
+                    href="https://github.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 group"
+                >
+                    <FaGithub className="w-5 h-5 group-hover:text-slate-800 dark:group-hover:text-white transition-colors" />
+                    <span className="font-bold text-xs tracking-widest uppercase group-hover:text-slate-800 dark:group-hover:text-white transition-colors">
+                        GitHub
+                    </span>
+                </a>
+                <a
+                    href="https://x.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 group"
+                >
+                    <FaXTwitter className="w-5 h-5 group-hover:text-orange-500 transition-colors" />
+                    <span className="font-bold text-xs tracking-widest uppercase group-hover:text-slate-800 dark:group-hover:text-white transition-colors">
+                        Takip Et
+                    </span>
+                </a>
+            </div>
         </div>
     )
 }

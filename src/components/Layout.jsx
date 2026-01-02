@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiFire, HiSparkles, HiSun, HiMoon, HiShare } from 'react-icons/hi2'
+import { FaXTwitter, FaGithub } from 'react-icons/fa6'
 import Sidebar from './Sidebar'
 import RightSidebar from './RightSidebar'
 import BottomNav from './BottomNav'
@@ -58,6 +59,28 @@ function Layout({ children }) {
                   >
                     <HiShare className="w-5 h-5" />
                   </button>
+
+                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-700/50 mx-1"></div>
+
+                  <a
+                    href="https://github.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
+                  >
+                    <FaGithub className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="https://x.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
+                  >
+                    <FaXTwitter className="w-5 h-5" />
+                  </a>
+
+                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-700/50 mx-1"></div>
+
                   <button
                     onClick={toggleTheme}
                     className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-200"
