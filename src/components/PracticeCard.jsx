@@ -51,7 +51,7 @@ function PracticeCard({ item, onNext, isCorrect, onAnswer }) {
         exit={{ opacity: 0, y: -50, scale: 0.95, filter: "blur(10px)" }}
         animate={isWrong ? "shake" : "normal"}
         variants={cardVariants}
-        className="glass-card rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden shadow-2xl shadow-indigo-500/10"
+        className="glass-card rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden shadow-2xl shadow-orange-500/10"
       >
         {/* Dynamic Background */}
         <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none transform rotate-12">
@@ -99,7 +99,7 @@ function PracticeCard({ item, onNext, isCorrect, onAnswer }) {
             const isSelected = selectedOption === option
             const isCorrectOption = option === item.correct
 
-            let stateClass = "bg-white/50 dark:bg-white/5 border-white/40 dark:border-white/10 hover:bg-white/80 dark:hover:bg-white/10 hover:shadow-lg hover:shadow-indigo-500/10 hover:-translate-y-1"
+            let stateClass = "bg-white/50 dark:bg-white/5 border-white/40 dark:border-white/10 hover:bg-white/80 dark:hover:bg-white/10 hover:shadow-lg hover:shadow-orange-500/10 hover:-translate-y-1"
             let icon = null
 
             if (showAnswer) {
@@ -130,7 +130,7 @@ function PracticeCard({ item, onNext, isCorrect, onAnswer }) {
                 <span className="flex-grow text-center">{option}</span>
                 {icon}
                 {!showAnswer && (
-                  <div className="absolute inset-0 rounded-2xl ring-2 ring-indigo-500/0 group-hover:ring-indigo-500/50 transition-all duration-300"></div>
+                  <div className="absolute inset-0 rounded-2xl ring-2 ring-orange-500/0 group-hover:ring-orange-500/50 transition-all duration-300"></div>
                 )}
               </motion.button>
             )

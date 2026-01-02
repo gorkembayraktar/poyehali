@@ -100,7 +100,7 @@ function LearningPath() {
                 <div className="glass-card rounded-2xl p-4 mx-auto max-w-lg border border-slate-200 dark:border-white/5 shadow-sm">
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
-                            <HiAcademicCap className="w-5 h-5 text-indigo-500" />
+                            <HiAcademicCap className="w-5 h-5 text-orange-500" />
                             <span className="font-bold text-slate-700 dark:text-slate-200">
                                 Genel İlerleme
                             </span>
@@ -112,7 +112,7 @@ function LearningPath() {
 
                     <div className="h-3 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                         <motion.div
-                            className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+                            className="h-full bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]"
                             initial={{ width: 0 }}
                             animate={{ width: `${overallProgress}%` }}
                             transition={{ duration: 0.8, ease: 'easeOut' }}

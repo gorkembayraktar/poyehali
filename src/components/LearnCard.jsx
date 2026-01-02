@@ -122,7 +122,7 @@ function LearnCard({ item, onNext, autoAdvanceDelay = 4000 }) {
             whileHover={{ scale: 1.02, translateY: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={playAudio}
-            className="w-full py-5 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/40 transition-all flex items-center justify-center gap-3 group/btn relative overflow-hidden"
+            className="w-full py-5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-600 text-white font-bold text-lg shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 transition-all flex items-center justify-center gap-3 group/btn relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
             <HiSpeakerWave className="w-6 h-6 group-hover/btn:animate-bounce" />

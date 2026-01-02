@@ -42,7 +42,7 @@ function Sidebar() {
                             className={`
                 w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200
                 ${isActive
-                                    ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-2 border-indigo-200 dark:border-indigo-800'
+                                    ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-2 border-orange-200 dark:border-orange-800'
                                     : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 border-2 border-transparent'
                                 }
                 ${item.disabled ? 'opacity-50 cursor-not-allowed hover:bg-transparent' : ''}

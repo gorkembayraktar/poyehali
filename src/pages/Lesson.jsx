@@ -256,7 +256,7 @@ function Lesson() {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => navigate('/')}
-                                className="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold shadow-lg"
+                                className="w-full py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-600 text-white font-bold shadow-lg shadow-orange-500/20"
                             >
                                 Devam Et
                             </motion.button>
@@ -266,7 +266,7 @@ function Lesson() {
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={handleRetry}
-                                    className="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold shadow-lg"
+                                    className="w-full py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-600 text-white font-bold shadow-lg shadow-orange-500/20"
                                 >
                                     Tekrar Dene
                                 </motion.button>
@@ -320,7 +320,7 @@ function Lesson() {
                     {/* Progress bar */}
                     <div className="h-2 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                         <motion.div
-                            className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+                            className="h-full bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 shadow-[0_0_10px_rgba(249,115,22,0.3)]"
                             initial={{ width: 0 }}
                             animate={{ width: `${stageProgress}%` }}
                             transition={{ duration: 0.3 }}

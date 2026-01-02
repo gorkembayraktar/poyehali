@@ -22,14 +22,13 @@ function ProgressBar({ current, total }) {
       <div className="glass-input p-1 rounded-full">
         <div className="h-4 bg-slate-100 dark:bg-slate-700/30 rounded-full overflow-hidden relative">
           <motion.div
-            className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_15px_rgba(99,102,241,0.4)] relative"
+            className="h-full bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 shadow-[0_0_20px_rgba(249,115,22,0.3)]"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.8, ease: "circOut" }}
-          >
-            {/* Shimmer Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-full -translate-x-full animate-[shimmer_2s_infinite]"></div>
-          </motion.div>
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          />
+          {/* Shimmer Effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-full -translate-x-full animate-[shimmer_2s_infinite]"></div>
         </div>
       </div>
     </motion.div>

@@ -62,7 +62,7 @@ function IntroductionCard({ letter, onNext, index, total }) {
               relative inline-flex items-center justify-center w-32 h-32 rounded-3xl
               ${isCritical
                                 ? 'bg-gradient-to-br from-rose-500/20 to-orange-500/20 ring-2 ring-rose-500/50'
-                                : 'bg-gradient-to-br from-indigo-500/20 to-purple-500/20'
+                                : 'bg-gradient-to-br from-orange-500/20 to-amber-500/20'
                             }
             `}
                     >
@@ -73,7 +73,7 @@ function IntroductionCard({ letter, onNext, index, total }) {
                         {/* Audio wave animation */}
                         {isPlaying && (
                             <motion.div
-                                className="absolute inset-0 rounded-3xl bg-indigo-500/20"
+                                className="absolute inset-0 rounded-3xl bg-orange-500/20"
                                 animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
                                 transition={{ duration: 1, repeat: Infinity }}
                             />
@@ -186,7 +186,7 @@ function IntroductionCard({ letter, onNext, index, total }) {
             w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2
             transition-all duration-300
             ${hasListened
-                            ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
+                            ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-lg shadow-orange-500/30'
                             : 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
                         }
           `}

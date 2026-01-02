@@ -7,7 +7,7 @@ import CompletionScreen from '../components/CompletionScreen'
 import ProgressBar from '../components/ProgressBar'
 
 const words = [
-  { russian: 'привет', transcription: 'privet', correct: 'Merhaba', options: ['Merhaba', 'Güle güle', 'Teşekkürler', 'Lütfen'], visual: <FaHandPaper className="text-indigo-500" /> },
+  { russian: 'привет', transcription: 'privet', correct: 'Merhaba', options: ['Merhaba', 'Güle güle', 'Teşekkürler', 'Lütfen'], visual: <FaHandPaper className="text-orange-500" /> },
   { russian: 'пока', transcription: 'poka', correct: 'Güle güle', options: ['Güle güle', 'Merhaba', 'Teşekkürler', 'Lütfen'], visual: <FaHandPaper className="text-rose-500" /> },
   { russian: 'спасибо', transcription: 'spasibo', correct: 'Teşekkürler', options: ['Teşekkürler', 'Lütfen', 'Merhaba', 'Güle güle'], visual: <FaPrayingHands className="text-emerald-500" /> },
   { russian: 'пожалуйста', transcription: 'pozhaluysta', correct: 'Lütfen', options: ['Lütfen', 'Teşekkürler', 'Merhaba', 'Güle güle'], visual: <FaPrayingHands className="text-amber-500" /> },
@@ -18,7 +18,7 @@ const words = [
   { russian: 'вода', transcription: 'voda', correct: 'Su', options: ['Su', 'Ekmek', 'Elma', 'Kitap'], visual: <FaWater className="text-cyan-500" /> },
   { russian: 'хлеб', transcription: 'khleb', correct: 'Ekmek', options: ['Ekmek', 'Su', 'Elma', 'Kitap'], visual: <FaBreadSlice className="text-yellow-600" /> },
   { russian: 'яблоко', transcription: 'yabloko', correct: 'Elma', options: ['Elma', 'Ekmek', 'Su', 'Kitap'], visual: <FaAppleAlt className="text-red-600" /> },
-  { russian: 'книга', transcription: 'kniga', correct: 'Kitap', options: ['Kitap', 'Elma', 'Ekmek', 'Su'], visual: <FaBook className="text-indigo-600" /> },
+  { russian: 'книга', transcription: 'kniga', correct: 'Kitap', options: ['Kitap', 'Elma', 'Ekmek', 'Su'], visual: <FaBook className="text-orange-600" /> },
   { russian: 'дом', transcription: 'dom', correct: 'Ev', options: ['Ev', 'Araba', 'Köpek', 'Kedi'], visual: <FaHome className="text-sky-600" /> },
   { russian: 'машина', transcription: 'mashina', correct: 'Araba', options: ['Araba', 'Ev', 'Köpek', 'Kedi'], visual: <FaCar className="text-red-500" /> },
   { russian: 'собака', transcription: 'sobaka', correct: 'Köpek', options: ['Köpek', 'Kedi', 'Ev', 'Araba'], visual: <FaDog className="text-amber-700" /> },
@@ -103,7 +103,7 @@ function Words() {
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleStartTest}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-xl text-base font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+                className="bg-gradient-to-r from-orange-500 to-amber-600 text-white px-8 py-3 rounded-xl text-base font-semibold shadow-md hover:shadow-lg transition-all duration-200"
               >
                 Teste Başla
               </motion.button>

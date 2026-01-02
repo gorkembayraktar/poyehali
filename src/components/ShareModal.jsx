@@ -124,8 +124,9 @@ function ShareModal({ isOpen, onClose, stats }) {
                                 className="relative w-full aspect-[4/5] rounded-[2rem] bg-[#090909] overflow-hidden p-8 flex flex-col justify-between text-left shadow-2xl mb-8 border border-white/5"
                                 style={{
                                     background: `
-                                        radial-gradient(circle at 100% 0%, rgba(79, 70, 229, 0.4) 0%, transparent 50%),
-                                        radial-gradient(circle at 0% 100%, rgba(147, 51, 234, 0.3) 0%, transparent 50%),
+                                        radial-gradient(circle at 100% 0%, rgba(249, 115, 22, 0.45) 0%, transparent 60%),
+                                        radial-gradient(circle at 0% 100%, rgba(245, 158, 11, 0.35) 0%, transparent 60%),
+                                        radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.05) 0%, transparent 50%),
                                         #090909
                                     `
                                 }}
@@ -137,7 +138,7 @@ function ShareModal({ isOpen, onClose, stats }) {
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-black text-white tracking-tight leading-none">Privet</h3>
-                                        <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.2em] mt-1">Rusça Öğren</p>
+                                        <p className="text-[10px] font-bold text-orange-400 uppercase tracking-[0.2em] mt-1">Rusça Öğren</p>
                                     </div>
                                 </div>
 
@@ -155,7 +156,7 @@ function ShareModal({ isOpen, onClose, stats }) {
                                         </div>
 
                                         <div>
-                                            <div className="flex items-center gap-2 text-indigo-400 mb-1">
+                                            <div className="flex items-center gap-2 text-amber-400 mb-1">
                                                 <HiSparkles className="w-5 h-5" />
                                                 <span className="text-xs font-black uppercase tracking-widest">TOPLAM XP</span>
                                             </div>
@@ -171,8 +172,8 @@ function ShareModal({ isOpen, onClose, stats }) {
                                     <div className="flex items-center gap-2">
                                         {/* Removed redundant badge */}
                                     </div>
-                                    <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">
-                                        privet.app
+                                    <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">
+                                        {window.location.hostname}
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +204,7 @@ function ShareModal({ isOpen, onClose, stats }) {
                                 </button>
                                 <button
                                     onClick={handleNativeShare}
-                                    className="flex flex-col items-center justify-center gap-2 py-4 rounded-3xl bg-indigo-500 text-white shadow-xl shadow-indigo-500/20 hover:bg-indigo-600 transition-all active:scale-95 border-b-4 border-indigo-700 hover:border-indigo-800"
+                                    className="flex flex-col items-center justify-center gap-2 py-4 rounded-3xl bg-orange-500 text-white shadow-xl shadow-orange-500/20 hover:bg-orange-600 transition-all active:scale-95 border-b-4 border-orange-700 hover:border-orange-800"
                                 >
                                     <HiShare className="w-6 h-6" />
                                     <span className="text-[11px] font-black uppercase tracking-wider">PAYLAŞ</span>

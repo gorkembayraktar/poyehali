@@ -4,17 +4,11 @@ import { useProgress } from '../../contexts/ProgressContext'
 import { lessonIcons } from '../../constants/icons'
 
 const colorClasses = {
-    indigo: {
-        active: 'from-indigo-500 to-purple-600',
-        completed: 'bg-indigo-500',
-        ring: 'ring-indigo-500/30',
-        glow: 'shadow-indigo-500/40'
-    },
-    purple: {
-        active: 'from-purple-500 to-pink-600',
-        completed: 'bg-purple-500',
-        ring: 'ring-purple-500/30',
-        glow: 'shadow-purple-500/40'
+    orange: {
+        active: 'from-orange-500 to-amber-600',
+        completed: 'bg-orange-500',
+        ring: 'ring-orange-500/30',
+        glow: 'shadow-orange-500/40'
     },
     rose: {
         active: 'from-rose-500 to-orange-600',
@@ -45,7 +39,7 @@ const colorClasses = {
 function PathNode({ lesson, onClick, index }) {
     const { getLessonState, progress } = useProgress()
     const state = getLessonState(lesson.id)
-    const colors = colorClasses[lesson.color] || colorClasses.indigo
+    const colors = colorClasses[lesson.color] || colorClasses.amber
     const isGate = lesson.type === 'gate'
 
     const completionData = progress.completedLessons[lesson.id]

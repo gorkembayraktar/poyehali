@@ -77,8 +77,8 @@ function SoundMatchCard({ letter, options, onAnswer, index, total }) {
                         whileTap={{ scale: 0.95 }}
                         className={`
               relative inline-flex items-center justify-center w-24 h-24 rounded-full
-              bg-gradient-to-br from-indigo-500 to-purple-600 text-white
-              shadow-xl shadow-indigo-500/30
+              bg-gradient-to-br from-orange-500 to-amber-600 text-white
+              shadow-xl shadow-orange-500/30
             `}
                     >
                         <HiSpeakerWave className={`w-10 h-10 ${isPlaying ? 'animate-pulse' : ''}`} />
@@ -103,7 +103,7 @@ function SoundMatchCard({ letter, options, onAnswer, index, total }) {
                         const isSelected = selectedOption === option
                         const isCorrectOption = option === letter.turkish
 
-                        let stateClass = 'bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 hover:border-indigo-400'
+                        let stateClass = 'bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 hover:border-orange-400'
 
                         if (showResult) {
                             if (isCorrectOption) {

@@ -24,7 +24,7 @@ function RightSidebar() {
 
                 {/* XP */}
                 <div className="flex-1 glass-card p-3 rounded-2xl flex items-center justify-center gap-2 border-2 border-indigo-100 dark:border-indigo-900/30">
-                    <HiSparkles className="w-5 h-5 text-indigo-500" />
+                    <HiSparkles className="w-5 h-5 text-orange-500 dark:text-orange-400" />
                     <span className="font-black text-slate-700 dark:text-slate-200">
                         {totalXP} XP
                     </span>
@@ -36,18 +36,18 @@ function RightSidebar() {
                 <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 blur-2xl -mr-12 -mt-12 rounded-full group-hover:bg-indigo-500/20 transition-colors" />
 
                 <div className="relative flex flex-col gap-4">
-                    <div className="flex items-center gap-3 text-indigo-500 dark:text-indigo-400">
-                        <div className="p-2 rounded-xl bg-indigo-500/10">
+                    <div className="flex items-center gap-3 text-orange-500 dark:text-orange-400">
+                        <div className="p-2 rounded-xl bg-orange-500/10">
                             <HiShare className="w-5 h-5" />
                         </div>
-                        <span className="font-bold">Başarılarını Paylaş</span>
+                        <span className="font-bold text-sm tracking-tight">Başarılarını Paylaş</span>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                         Topladığın XP ve serini arkadaşlarına göstererek onlara meydan oku!
                     </p>
                     <button
                         onClick={() => setIsShareModalOpen(true)}
-                        className="w-full py-2.5 rounded-xl bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:bg-indigo-600 active:scale-95 transition-all"
+                        className="w-full py-2.5 rounded-xl bg-orange-500 text-white font-bold text-sm shadow-lg shadow-orange-500/20 hover:bg-orange-600 active:scale-95 transition-all"
                     >
                         Şimdi Paylaş
                     </button>
@@ -72,7 +72,7 @@ function RightSidebar() {
                                 <HiSun className="w-5 h-5" />
                             </div>
                         ) : (
-                            <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
+                            <div className="p-2 rounded-lg bg-orange-500/20 text-orange-400">
                                 <HiMoon className="w-5 h-5" />
                             </div>
                         )}
@@ -83,7 +83,7 @@ function RightSidebar() {
 
                     <div className={`
                         w-10 h-6 rounded-full p-1 transition-colors duration-200
-                        ${theme === 'dark' ? 'bg-indigo-500' : 'bg-slate-300'}
+                        ${theme === 'dark' ? 'bg-orange-500' : 'bg-slate-300'}
                     `}>
                         <motion.div
                             animate={{ x: theme === 'dark' ? 16 : 0 }}

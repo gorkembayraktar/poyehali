@@ -46,7 +46,7 @@ function Layout({ children }) {
                   <span className="font-bold text-sm text-slate-700 dark:text-slate-200">{streak.current}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <HiSparkles className="w-5 h-5 text-indigo-500" />
+                  <HiSparkles className="w-5 h-5 text-orange-500" />
                   <span className="font-bold text-sm text-slate-700 dark:text-slate-200">{totalXP}</span>
                 </div>
                 <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
@@ -54,7 +54,7 @@ function Layout({ children }) {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setIsShareModalOpen(true)}
-                    className="p-2 rounded-lg bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20 active:scale-90 transition-all"
+                    className="p-2 rounded-lg bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 active:scale-90 transition-all"
                   >
                     <HiShare className="w-5 h-5" />
                   </button>

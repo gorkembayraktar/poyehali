@@ -25,7 +25,7 @@ export const learningPath = [
     subtitle: 'А Б В Г Д Е',
     letters: ['А', 'Б', 'В', 'Г', 'Д', 'Е'],
     icon: '🔤',
-    color: 'indigo',
+    color: 'orange',
     requires: null, // Always unlocked
     passScore: 80
   },
@@ -37,7 +37,7 @@ export const learningPath = [
     subtitle: 'Ё Ж З И Й К',
     letters: ['Ё', 'Ж', 'З', 'И', 'Й', 'К'],
     icon: '🔤',
-    color: 'indigo',
+    color: 'orange',
     requires: { lessonId: 'alphabet_1', minScore: 80 },
     passScore: 80
   },
@@ -49,7 +49,7 @@ export const learningPath = [
     subtitle: 'Л М Н О П Р',
     letters: ['Л', 'М', 'Н', 'О', 'П', 'Р'],
     icon: '🔤',
-    color: 'indigo',
+    color: 'orange',
     requires: { lessonId: 'alphabet_2', minScore: 80 },
     passScore: 80
   },
@@ -61,7 +61,7 @@ export const learningPath = [
     subtitle: 'С Т У Ф Х Ц',
     letters: ['С', 'Т', 'У', 'Ф', 'Х', 'Ц'],
     icon: '🔤',
-    color: 'indigo',
+    color: 'orange',
     requires: { lessonId: 'alphabet_3', minScore: 80 },
     passScore: 80
   },
@@ -73,7 +73,7 @@ export const learningPath = [
     subtitle: 'Ч Ш Щ Ъ Ы Ь',
     letters: ['Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь'],
     icon: '🔤',
-    color: 'indigo',
+    color: 'orange',
     requires: { lessonId: 'alphabet_4', minScore: 80 },
     passScore: 80
   },
@@ -85,7 +85,7 @@ export const learningPath = [
     subtitle: 'Э Ю Я + Tekrar',
     letters: ['Э', 'Ю', 'Я'],
     icon: '🔤',
-    color: 'indigo',
+    color: 'orange',
     requires: { lessonId: 'alphabet_5', minScore: 80 },
     passScore: 80
   },
@@ -110,7 +110,7 @@ export const learningPath = [
     title: 'Sesli Harfler',
     subtitle: 'Ünlü sesler',
     icon: '🔊',
-    color: 'purple',
+    color: 'amber',
     requires: { gateId: 'alphabet_gate', minScore: 80 },
     passScore: 80
   },
@@ -121,7 +121,7 @@ export const learningPath = [
     title: 'Sessiz Harfler',
     subtitle: 'Ünsüz grupları',
     icon: '🔊',
-    color: 'purple',
+    color: 'amber',
     requires: { lessonId: 'phonetic_1', minScore: 80 },
     passScore: 80
   },
@@ -132,7 +132,7 @@ export const learningPath = [
     title: 'Zor Sesler',
     subtitle: 'Ж, Ш, Щ, Ц, Ч',
     icon: '🔊',
-    color: 'purple',
+    color: 'amber',
     requires: { lessonId: 'phonetic_2', minScore: 80 },
     passScore: 80
   },
@@ -275,13 +275,13 @@ export const sections = {
   alphabet: {
     title: 'Alfabe',
     description: 'Kiril alfabesini öğren',
-    color: 'indigo',
+    color: 'orange',
     icon: '🔤'
   },
   phonetics: {
     title: 'Fonetik',
     description: 'Sesleri tanı',
-    color: 'purple',
+    color: 'amber',
     icon: '🔊'
   },
   confusion: {

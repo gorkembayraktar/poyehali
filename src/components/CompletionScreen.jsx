@@ -24,7 +24,7 @@ function CompletionScreen({ score, onRestart }) {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="flex items-center justify-center min-h-[60vh] relative"
     >
-      <div className="glass-card rounded-[3rem] p-10 md:p-14 w-full max-w-lg mx-auto relative overflow-hidden text-center shadow-2xl shadow-indigo-500/20">
+      <div className="glass-card rounded-[3rem] p-10 md:p-14 w-full max-w-lg mx-auto relative overflow-hidden text-center shadow-2xl shadow-orange-500/20">
 
         {/* Animated Particles */}
         <div className="absolute inset-0 pointer-events-none">
@@ -67,7 +67,7 @@ function CompletionScreen({ score, onRestart }) {
         {/* Circular Progress */}
         <div className="relative w-48 h-48 mx-auto mb-12">
           {/* Outer Ring Glow */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-fuchsia-500 to-amber-500 blur-xl opacity-20 animate-pulse-slow"></div>
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 blur-xl opacity-20 animate-pulse-slow"></div>
 
           <svg className="transform -rotate-90 w-48 h-48 relative z-10">
             {/* Background Circle */}
@@ -95,9 +95,9 @@ function CompletionScreen({ score, onRestart }) {
             />
             <defs>
               <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#d946ef" />
-                <stop offset="50%" stopColor="#f43f5e" />
-                <stop offset="100%" stopColor="#f59e0b" />
+                <stop offset="0%" stopColor="#f97316" />
+                <stop offset="50%" stopColor="#f59e0b" />
+                <stop offset="100%" stopColor="#fbbf24" />
               </linearGradient>
             </defs>
           </svg>

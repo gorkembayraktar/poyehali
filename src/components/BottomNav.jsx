@@ -27,7 +27,7 @@ function BottomNav() {
                             className={`
                 flex flex-col items-center gap-1 p-2 rounded-xl transition-all
                 ${isActive
-                                    ? 'text-indigo-600 dark:text-indigo-400'
+                                    ? 'text-orange-600 dark:text-orange-400'
                                     : 'text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800'
                                 }
                 ${item.disabled ? 'opacity-40' : ''}

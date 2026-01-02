@@ -12,7 +12,7 @@ function PathConnector({ fromState, toState, index }) {
                 <div className={`
           absolute inset-0 rounded-full
           ${isCompleted
-                        ? 'bg-emerald-500'
+                        ? 'bg-orange-500'
                         : 'bg-slate-200 dark:bg-slate-700'
                     }
         `} />
@@ -20,7 +20,7 @@ function PathConnector({ fromState, toState, index }) {
                 {/* Animated fill for active transition */}
                 {isActive && (
                     <motion.div
-                        className="absolute inset-x-0 top-0 rounded-full bg-gradient-to-b from-emerald-500 to-indigo-500"
+                        className="absolute inset-x-0 top-0 rounded-full bg-gradient-to-b from-orange-500 to-amber-500"
                         initial={{ height: 0 }}
                         animate={{ height: '100%' }}
                         transition={{
@@ -35,7 +35,7 @@ function PathConnector({ fromState, toState, index }) {
                 {/* Glow dot at connection point */}
                 {isActive && (
                     <motion.div
-                        className="absolute left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-indigo-500"
+                        className="absolute left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-orange-500"
                         animate={{
                             y: [0, 32, 0],
                             opacity: [1, 0.5, 1],

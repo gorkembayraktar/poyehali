@@ -38,7 +38,7 @@ function TestCard({ question, onAnswer, index, total, isGate = false }) {
             text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full
             ${isGate
                             ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400'
-                            : 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
+                            : 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
                         }
           `}>
                         {isGate ? '⚡ Kapı Testi' : 'Mini Test'}
@@ -64,7 +64,7 @@ function TestCard({ question, onAnswer, index, total, isGate = false }) {
                         const isSelected = selectedOption === option
                         const isCorrectOption = option === question.correct
 
-                        let stateClass = 'bg-white/70 dark:bg-slate-800/70 border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:bg-white dark:hover:bg-slate-700'
+                        let stateClass = 'bg-white/70 dark:bg-slate-800/70 border-slate-200 dark:border-slate-700 hover:border-orange-400 hover:bg-white dark:hover:bg-slate-700'
 
                         if (showResult) {
                             if (isCorrectOption) {

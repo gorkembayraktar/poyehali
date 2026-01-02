@@ -70,11 +70,11 @@ function ConfusionCard({ confusion, onAnswer, index, total }) {
                         <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center shadow-xl">
                             <span className="text-5xl font-black text-white">{confusion.russian}</span>
                         </div>
-                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-indigo-500 text-white text-xs font-bold">
+                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-orange-500 text-white text-xs font-bold">
                             RUS
                         </div>
                         <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white dark:bg-slate-700 shadow-lg flex items-center justify-center">
-                            <HiSpeakerWave className="w-4 h-4 text-indigo-500" />
+                            <HiSpeakerWave className="w-4 h-4 text-orange-500" />
                         </div>
                     </motion.button>
 
