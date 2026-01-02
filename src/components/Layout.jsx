@@ -8,7 +8,7 @@ import BottomNav from './BottomNav'
 import logo from '../assets/logo.png'
 import { useProgress } from '../contexts/ProgressContext'
 import { useTheme } from '../contexts/ThemeContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ShareModal from './ShareModal'
 
 function Layout({ children }) {
@@ -16,6 +16,10 @@ function Layout({ children }) {
   const { streak, totalXP } = useProgress()
   const { theme, toggleTheme } = useTheme()
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
 
   return (
     <div className="min-h-screen relative bg-slate-50 dark:bg-[#121212] transition-colors duration-500">
