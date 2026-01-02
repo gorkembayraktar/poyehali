@@ -51,7 +51,7 @@ function ShareModal({ isOpen, onClose, stats }) {
                     const url = URL.createObjectURL(blob)
                     const a = document.createElement('a')
                     a.href = url
-                    a.download = `privet-basari-${stats.streak}-gun.png`
+                    a.download = `poyehali-basari-${stats.streak}-gun.png`
                     a.click()
                     URL.revokeObjectURL(url)
 
@@ -70,7 +70,7 @@ function ShareModal({ isOpen, onClose, stats }) {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: 'Privet - Rusça Öğreniyorum',
+                    title: 'Poyehali - Rusça Öğreniyorum',
                     text: shareText,
                     url: shareUrl,
                 })
@@ -134,10 +134,10 @@ function ShareModal({ isOpen, onClose, stats }) {
                                 {/* Header: Logo & Branding */}
                                 <div className="relative z-10 flex items-center gap-3">
                                     <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center p-2.5 shadow-xl">
-                                        <img src={logo} alt="Privet" className="w-full h-full object-contain" />
+                                        <img src={logo} alt="Poyehali" className="w-full h-full object-contain" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-black text-white tracking-tight leading-none">Privet</h3>
+                                        <h3 className="text-xl font-black text-white tracking-tight leading-none">Poyehali</h3>
                                         <p className="text-[10px] font-bold text-orange-400 uppercase tracking-[0.2em] mt-1">Rusça Öğren</p>
                                     </div>
                                 </div>

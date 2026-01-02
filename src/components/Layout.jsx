@@ -37,7 +37,7 @@ function Layout({ children }) {
             <div className="md:hidden sticky top-0 z-50 p-4 bg-white/80 dark:bg-[#181818]/80 backdrop-blur-md border-b border-slate-200 dark:border-white/5 flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <img src={logo} alt="Rusça Logo" className="w-8 h-8 object-contain" />
-                <span className="font-bold text-slate-800 dark:text-white">Privet</span>
+                <span className="font-bold text-slate-800 dark:text-white">Poyehali</span>
               </div>
 
               {/* Mobile Stats & Toggle */}

@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { HiHome, HiTrophy, HiBookOpen, HiShoppingBag, HiUser } from 'react-icons/hi2'
+import { HiHome, HiTrophy, HiBookOpen, HiShoppingBag, HiUser, HiAcademicCap } from 'react-icons/hi2'
 import { FaXTwitter, FaGithub } from 'react-icons/fa6'
 import logo from '../assets/logo.png'
 
@@ -25,7 +25,7 @@ function Sidebar() {
                 <div className="flex items-center gap-3">
                     <img src={logo} alt="Rusça Logo" className="w-10 h-10 object-contain" />
                     <h1 className="font-bold text-slate-800 dark:text-white text-xl tracking-tight">
-                        Privet
+                        Poyehali
                     </h1>
                 </div>
             </div>
@@ -57,6 +57,28 @@ function Sidebar() {
                     )
                 })}
             </nav>
+
+            {/* Promo Card */}
+            <div className="px-4 mb-4">
+                <a
+                    href="https://kirilalfabesi.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-600 text-white shadow-lg shadow-orange-500/20 hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group"
+                >
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-2 mb-2">
+                            <HiAcademicCap className="w-5 h-5" />
+                            <span className="text-[10px] font-black tracking-widest uppercase opacity-80">Önerilen Kaynak</span>
+                        </div>
+                        <h4 className="font-bold text-sm leading-tight mb-1">Kiril Alfabesi</h4>
+                        <p className="text-[11px] opacity-90 font-medium">Alfabeyi detaylı öğrenmek için ziyaret et.</p>
+                    </div>
+                    {/* Decorative element */}
+                    <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500" />
+                </a>
+            </div>
+
             {/* Footer */}
             <div className="p-4 mt-auto border-t-2 border-slate-100 dark:border-white/5 pt-6 space-y-1">
                 <a
