@@ -27,6 +27,7 @@ function Lesson() {
     const [isComplete, setIsComplete] = useState(false)
     const [finalScore, setFinalScore] = useState(0)
 
+
     // Get letters for this lesson
     const letters = useMemo(() => {
         if (!lesson) return []
@@ -77,11 +78,22 @@ function Lesson() {
         // Section: Vocabulary logic
         if (lesson.section === 'vocabulary' || lesson.section === 'practice') {
             let source = []
-            if (lesson.id === 'numbers_1') source = numbers.slice(0, 10)
-            if (lesson.id === 'numbers_2') source = numbers.slice(10)
-            if (lesson.id === 'colors') source = colors
-            if (lesson.id === 'daily_words') source = dailyWords
-            if (lesson.id === 'simple_phrases') source = simplePhrases
+
+            if (lesson.id === 'daily_loop') {
+                // Aggregate all vocabulary sources for daily practice
+                const safeNumbers = Array.isArray(numbers) ? numbers : []
+                const safeColors = Array.isArray(colors) ? colors : []
+                const safeWords = Array.isArray(dailyWords) ? dailyWords : []
+                const safePhrases = Array.isArray(simplePhrases) ? simplePhrases : []
+
+                source = shuffleArray([...safeNumbers, ...safeColors, ...safeWords, ...safePhrases]).slice(0, 20)
+            } else {
+                if (lesson.id === 'numbers_1') source = (numbers || []).slice(0, 10)
+                if (lesson.id === 'numbers_2') source = (numbers || []).slice(10)
+                if (lesson.id === 'colors') source = colors || []
+                if (lesson.id === 'daily_words') source = dailyWords || []
+                if (lesson.id === 'simple_phrases') source = simplePhrases || []
+            }
 
             // Normalize vocabulary data to match letter structure
             return source.map(item => ({
@@ -110,13 +122,16 @@ function Lesson() {
 
     // Generate test questions
     const testQuestions = useMemo(() => {
+        if (!letters || letters.length === 0) return []
+
         const isGate = lesson?.type === 'gate'
+        const isPractice = lesson?.type === 'practice'
 
         // Shuffle source items for variety
         const shuffled = shuffleArray(letters)
 
         // Size logic
-        const size = isGate ? Math.min(20, shuffled.length) : Math.min(letters.length, 10)
+        const size = isGate ? Math.min(20, shuffled.length) : (isPractice ? Math.min(letters.length, 15) : Math.min(letters.length, 10))
 
         return shuffled.slice(0, size).map(item => ({
             letter: item.letter,
@@ -135,26 +150,43 @@ function Lesson() {
         return [...new Set(allTurkish)].slice(0, 8)
     }, [])
 
-    // Check if lesson is accessible
+    // Initialize lesson and sync progress
     useEffect(() => {
         if (!lesson) {
             navigate('/')
             return
         }
+
         if (!isLessonUnlocked(lessonId)) {
             navigate('/')
             return
         }
 
-        // If it's a gate, skip to test stage immediately
-        if (lesson.type === 'gate') {
-            setStage('test')
-        } else {
-            setStage('introduction')
-        }
-
+        // Start lesson in global state if needed
         startLesson(lessonId)
-    }, [lesson, lessonId, isLessonUnlocked, startLesson, navigate])
+
+        // Sync local state from progress if it exists
+        const saved = progress.lessonProgress[lessonId]
+        if (saved) {
+            // For practice lessons, always force 'test' stage
+            if (lesson.type === 'practice') {
+                setStage('test')
+            } else {
+                setStage(saved.stage || 'introduction')
+            }
+            setStageIndex(saved.stageIndex || 0)
+            setAnswers(saved.answers || [])
+        } else {
+            // New lesson defaults
+            if (lesson.type === 'gate' || lesson.type === 'practice') {
+                setStage('test')
+            } else {
+                setStage('introduction')
+            }
+            setStageIndex(0)
+            setAnswers([])
+        }
+    }, [lessonId, lesson, isLessonUnlocked, navigate, startLesson])
 
     // Get current stage items
     const getCurrentItems = () => {
@@ -245,7 +277,7 @@ function Lesson() {
         setFinalScore(score)
         setIsComplete(true)
 
-        const passed = completeLesson(lessonId, score)
+        const passed = lesson.type === 'practice' ? true : completeLesson(lessonId, score)
     }
 
     // Handle exit
@@ -265,7 +297,7 @@ function Lesson() {
 
     // Completion screen
     if (isComplete) {
-        const passed = finalScore >= lesson.passScore
+        const passed = lesson.type === 'practice' ? true : finalScore >= (lesson.passScore || 80)
 
         return (
             <div className="min-h-screen flex items-center justify-center p-4">

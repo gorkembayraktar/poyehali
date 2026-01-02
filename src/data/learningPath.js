@@ -254,7 +254,7 @@ export const learningPath = [
     subtitle: 'İlk cümlelerim',
     icon: '💬',
     color: 'cyan',
-    requires: { lessonId: 'daily_words', minScore: 80 },
+    requires: { lessonId: 'daily_words', minScore: 0 }, // Unlocked if daily_words completed
     passScore: 80
   },
   {
@@ -265,7 +265,7 @@ export const learningPath = [
     subtitle: 'Sonsuz tekrar',
     icon: '🔄',
     color: 'cyan',
-    requires: { lessonId: 'simple_phrases', minScore: 80 },
+    requires: { lessonId: 'simple_phrases', minScore: 0 }, // Unlocked if simple_phrases completed
     passScore: null // No pass score - always available once unlocked
   }
 ]
