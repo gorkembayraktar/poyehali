@@ -5,10 +5,27 @@ import { useProgress } from '../contexts/ProgressContext'
 import { useSound } from '../contexts/SoundContext'
 import ShareModal from './ShareModal'
 
+const MOTIVATION_QUOTES = [
+    "Yarınki sen, bugün pes etmediğin için sana teşekkür edecek.",
+    "Her yeni kelime, yeni bir dünyanın kapısını aralar.",
+    "Zorluklar, başarının değerini artıran süslerdir.",
+    "Bugün attığın küçük bir adım, yarınki büyük başarının temelidir.",
+    "Öğrenmek, asla bitmeyen bir yolculuktur.",
+    "Rusça öğrenmek bir maratondur, depar değil. Sabret!",
+    "Hata yapmaktan korkma, her hata bir öğrenme fırsatıdır.",
+    "Zeka değil, süreklilik başarıyı getirir.",
+    "Dil öğrenmek, sadece kelimeleri değil, bir kültürü keşfetmektir.",
+    "Günde sadece 10 dakika bile, hiç yoktan iyidir."
+]
+
 function RightSidebar() {
     const { streak, totalXP } = useProgress()
     const { setIsSettingsOpen } = useSound()
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+
+    // Rotate quote every 6 hours
+    const quoteIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 6)) % MOTIVATION_QUOTES.length
+    const currentQuote = MOTIVATION_QUOTES[quoteIndex]
 
     return (
         <div className="hidden lg:flex flex-col w-80 sticky top-0 h-screen p-6 gap-6 z-40 overflow-y-auto">
@@ -75,8 +92,8 @@ function RightSidebar() {
             {/* Footer Widget */}
             <div className="mt-auto glass-card p-4 rounded-2xl border-2 border-slate-200 dark:border-white/5 border-dashed min-h-[120px] flex items-center justify-center text-center">
                 <div>
-                    <p className="font-bold text-slate-400 dark:text-slate-500 mb-2 text-sm italic">
-                        "Yarınki sen, bugün pes etmediğin için sana teşekkür edecek."
+                    <p className="font-bold text-slate-400 dark:text-slate-500 mb-2 text-sm italic leading-relaxed">
+                        "{currentQuote}"
                     </p>
                 </div>
             </div>
