@@ -4,6 +4,7 @@ import { SoundProvider } from './contexts/SoundContext'
 import { ProgressProvider } from './contexts/ProgressContext'
 import Home from './pages/Home'
 import Lesson from './pages/Lesson'
+import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/lesson/:lessonId" element={<Lesson />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </Layout>
           </Router>
