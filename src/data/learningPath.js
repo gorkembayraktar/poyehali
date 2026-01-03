@@ -244,6 +244,50 @@ export const learningPath = [
     requires: { lessonId: 'colors', minScore: 80 },
     passScore: 80
   },
+  {
+    id: 'people_titles',
+    type: 'lesson',
+    section: 'vocabulary',
+    title: 'Kişiler & Hitaplar',
+    subtitle: 'я, ты, мама, папа...',
+    icon: '👥',
+    color: 'emerald',
+    requires: { lessonId: 'daily_words', minScore: 80 },
+    passScore: 80
+  },
+  {
+    id: 'day_time',
+    type: 'lesson',
+    section: 'vocabulary',
+    title: 'Gün & Zaman',
+    subtitle: 'сегодня, завтра...',
+    icon: '📅',
+    color: 'emerald',
+    requires: { lessonId: 'people_titles', minScore: 80 },
+    passScore: 80
+  },
+  {
+    id: 'basic_verbs',
+    type: 'lesson',
+    section: 'vocabulary',
+    title: 'Temel Fiiller',
+    subtitle: 'идти, видеть...',
+    icon: '🏃',
+    color: 'emerald',
+    requires: { lessonId: 'day_time', minScore: 80 },
+    passScore: 80
+  },
+  {
+    id: 'emotions_states',
+    type: 'lesson',
+    section: 'vocabulary',
+    title: 'Duygular & Durumlar',
+    subtitle: 'хорошо, плохо...',
+    icon: '😊',
+    color: 'emerald',
+    requires: { lessonId: 'basic_verbs', minScore: 80 },
+    passScore: 80
+  },
 
   // ===== PRACTICE SECTION =====
   {
@@ -254,7 +298,7 @@ export const learningPath = [
     subtitle: 'İlk cümlelerim',
     icon: '💬',
     color: 'cyan',
-    requires: { lessonId: 'daily_words', minScore: 0 }, // Unlocked if daily_words completed
+    requires: { lessonId: 'emotions_states', minScore: 0 }, // Unlocked if emotions_states completed
     passScore: 80
   },
   {

@@ -60,3 +60,57 @@ export const simplePhrases = [
   { russian: 'Приятного аппетита', transcription: 'Priyatnogo appetita', correct: 'Afiyet olsun', options: ['Afiyet olsun', 'Teşekkürler', 'İyi geceler', 'Günaydın'] },
   { russian: 'Я тебя люблю', transcription: 'Ya tebya lyublyu', correct: 'Seni seviyorum', options: ['Seni seviyorum', 'Seni özledim', 'Nasılsın?', 'Görüşürüz'] },
 ]
+
+export const peopleAndTitles = [
+  // Kişi zamirleri
+  { russian: 'я', transcription: 'ya', correct: 'Ben', options: ['Ben', 'Sen', 'O', 'Biz'] },
+  { russian: 'ты', transcription: 'ty', correct: 'Sen', options: ['Sen', 'Ben', 'O', 'Siz'] },
+  { russian: 'он', transcription: 'on', correct: 'O (erkek)', options: ['O (erkek)', 'O (kadın)', 'Ben', 'Sen'] },
+  { russian: 'она', transcription: 'ona', correct: 'O (kadın)', options: ['O (kadın)', 'O (erkek)', 'Ben', 'Sen'] },
+  { russian: 'оно', transcription: 'ono', correct: 'O (cansız)', options: ['O (cansız)', 'O (erkek)', 'O (kadın)', 'Onlar'] },
+  { russian: 'мы', transcription: 'my', correct: 'Biz', options: ['Biz', 'Siz', 'Onlar', 'Ben'] },
+  { russian: 'вы', transcription: 'vy', correct: 'Siz', options: ['Siz', 'Biz', 'Onlar', 'Sen'] },
+  { russian: 'они', transcription: 'oni', correct: 'Onlar', options: ['Onlar', 'Biz', 'Siz', 'O'] },
+  // Aile ve hitaplar
+  { russian: 'мама', transcription: 'mama', correct: 'Anne', options: ['Anne', 'Baba', 'Büyükanne', 'Kız Kardeş'] },
+  { russian: 'папа', transcription: 'papa', correct: 'Baba', options: ['Baba', 'Anne', 'Büyükbaba', 'Erkek Kardeş'] },
+  { russian: 'бабушка', transcription: 'babushka', correct: 'Büyükanne', options: ['Büyükanne', 'Büyükbaba', 'Anne', 'Kız Kardeş'] },
+  { russian: 'дедушка', transcription: 'dedushka', correct: 'Büyükbaba', options: ['Büyükbaba', 'Büyükanne', 'Baba', 'Erkek Kardeş'] },
+  { russian: 'брат', transcription: 'brat', correct: 'Erkek Kardeş', options: ['Erkek Kardeş', 'Kız Kardeş', 'Baba', 'Arkadaş'] },
+  { russian: 'сестра', transcription: 'sestra', correct: 'Kız Kardeş', options: ['Kız Kardeş', 'Erkek Kardeş', 'Anne', 'Arkadaş'] },
+  { russian: 'друг', transcription: 'drug', correct: 'Arkadaş (erkek)', options: ['Arkadaş (erkek)', 'Arkadaş (kadın)', 'Erkek Kardeş', 'Baba'] },
+  { russian: 'подруга', transcription: 'podruga', correct: 'Arkadaş (kadın)', options: ['Arkadaş (kadın)', 'Arkadaş (erkek)', 'Kız Kardeş', 'Anne'] },
+]
+
+export const dayAndTime = [
+  { russian: 'сегодня', transcription: 'sevodnya', correct: 'Bugün', options: ['Bugün', 'Yarın', 'Dün', 'Şimdi'] },
+  { russian: 'завтра', transcription: 'zavtra', correct: 'Yarın', options: ['Yarın', 'Bugün', 'Dün', 'Sonra'] },
+  { russian: 'вчера', transcription: 'vchera', correct: 'Dün', options: ['Dün', 'Bugün', 'Yarın', 'Önce'] },
+  { russian: 'сейчас', transcription: 'seychas', correct: 'Şimdi', options: ['Şimdi', 'Sonra', 'Önce', 'Bugün'] },
+  { russian: 'утро', transcription: 'utro', correct: 'Sabah', options: ['Sabah', 'Akşam', 'Gece', 'Öğle'] },
+  { russian: 'день', transcription: 'den', correct: 'Gün/Öğle', options: ['Gün/Öğle', 'Gece', 'Sabah', 'Akşam'] },
+  { russian: 'вечер', transcription: 'vecher', correct: 'Akşam', options: ['Akşam', 'Sabah', 'Gece', 'Öğle'] },
+  { russian: 'ночь', transcription: 'noch', correct: 'Gece', options: ['Gece', 'Gündüz', 'Sabah', 'Akşam'] },
+]
+
+export const basicVerbs = [
+  { russian: 'идти', transcription: 'idti', correct: 'Gitmek', options: ['Gitmek', 'Gelmek', 'Görmek', 'Almak'] },
+  { russian: 'приходить', transcription: 'prikhodit', correct: 'Gelmek', options: ['Gelmek', 'Gitmek', 'Vermek', 'Bakmak'] },
+  { russian: 'видеть', transcription: 'videt', correct: 'Görmek', options: ['Görmek', 'Bakmak', 'Duymak', 'Bilmek'] },
+  { russian: 'брать', transcription: 'brat', correct: 'Almak', options: ['Almak', 'Vermek', 'Tutmak', 'Bırakmak'] },
+  { russian: 'давать', transcription: 'davat', correct: 'Vermek', options: ['Vermek', 'Almak', 'Tutmak', 'Göndermek'] },
+  { russian: 'есть', transcription: 'yest', correct: 'Yemek', options: ['Yemek', 'İçmek', 'Uyumak', 'Çalışmak'] },
+  { russian: 'пить', transcription: 'pit', correct: 'İçmek', options: ['İçmek', 'Yemek', 'Uyumak', 'Koşmak'] },
+  { russian: 'знать', transcription: 'znat', correct: 'Bilmek', options: ['Bilmek', 'Anlamak', 'Görmek', 'Duymak'] },
+]
+
+export const emotionsStates = [
+  { russian: 'хорошо', transcription: 'khorosho', correct: 'İyi', options: ['İyi', 'Kötü', 'Büyük', 'Küçük'] },
+  { russian: 'плохо', transcription: 'plokho', correct: 'Kötü', options: ['Kötü', 'İyi', 'Güzel', 'Çirkin'] },
+  { russian: 'большой', transcription: 'bolshoy', correct: 'Büyük', options: ['Büyük', 'Küçük', 'Uzun', 'Kısa'] },
+  { russian: 'маленький', transcription: 'malenkiy', correct: 'Küçük', options: ['Küçük', 'Büyük', 'Kısa', 'Uzun'] },
+  { russian: 'красивый', transcription: 'krasivyy', correct: 'Güzel', options: ['Güzel', 'Çirkin', 'İyi', 'Kötü'] },
+  { russian: 'счастливый', transcription: 'schastlivyy', correct: 'Mutlu', options: ['Mutlu', 'Üzgün', 'Kızgın', 'Yorgun'] },
+  { russian: 'грустный', transcription: 'grustnyy', correct: 'Üzgün', options: ['Üzgün', 'Mutlu', 'Kızgın', 'Sevinçli'] },
+  { russian: 'уставший', transcription: 'ustavshiy', correct: 'Yorgun', options: ['Yorgun', 'Enerjik', 'Mutlu', 'Üzgün'] },
+]

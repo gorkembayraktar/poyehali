@@ -10,7 +10,7 @@ import IntroductionCard from '../components/lessons/IntroductionCard'
 import SoundMatchCard from '../components/lessons/SoundMatchCard'
 import ConfusionCard from '../components/lessons/ConfusionCard'
 import TestCard from '../components/lessons/TestCard'
-import { numbers, colors, dailyWords, simplePhrases } from '../data/vocabulary'
+import { numbers, colors, dailyWords, simplePhrases, peopleAndTitles, dayAndTime, basicVerbs, emotionsStates } from '../data/vocabulary'
 
 // Stages in order
 const STAGES = ['introduction', 'sound_match', 'confusion', 'test']
@@ -84,14 +84,22 @@ function Lesson() {
                 const safeNumbers = Array.isArray(numbers) ? numbers : []
                 const safeColors = Array.isArray(colors) ? colors : []
                 const safeWords = Array.isArray(dailyWords) ? dailyWords : []
+                const safePeople = Array.isArray(peopleAndTitles) ? peopleAndTitles : []
+                const safeDayTime = Array.isArray(dayAndTime) ? dayAndTime : []
+                const safeVerbs = Array.isArray(basicVerbs) ? basicVerbs : []
+                const safeEmotions = Array.isArray(emotionsStates) ? emotionsStates : []
                 const safePhrases = Array.isArray(simplePhrases) ? simplePhrases : []
 
-                source = shuffleArray([...safeNumbers, ...safeColors, ...safeWords, ...safePhrases]).slice(0, 20)
+                source = shuffleArray([...safeNumbers, ...safeColors, ...safeWords, ...safePeople, ...safeDayTime, ...safeVerbs, ...safeEmotions, ...safePhrases]).slice(0, 20)
             } else {
                 if (lesson.id === 'numbers_1') source = (numbers || []).slice(0, 10)
                 if (lesson.id === 'numbers_2') source = (numbers || []).slice(10)
                 if (lesson.id === 'colors') source = colors || []
                 if (lesson.id === 'daily_words') source = dailyWords || []
+                if (lesson.id === 'people_titles') source = peopleAndTitles || []
+                if (lesson.id === 'day_time') source = dayAndTime || []
+                if (lesson.id === 'basic_verbs') source = basicVerbs || []
+                if (lesson.id === 'emotions_states') source = emotionsStates || []
                 if (lesson.id === 'simple_phrases') source = simplePhrases || []
             }
 

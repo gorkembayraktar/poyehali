@@ -84,7 +84,6 @@ function LearningPath() {
     const sectionOrder = ['alphabet', 'phonetics', 'confusion', 'vocabulary', 'practice']
 
     const isSectionComplete = (sectionId) => {
-        if (masteredSections && masteredSections[sectionId]) return true
         const sectionLessons = groupedLessons[sectionId] || []
         if (sectionLessons.length === 0) return false
         return sectionLessons.every(l => getLessonState(l.id) === 'completed')
