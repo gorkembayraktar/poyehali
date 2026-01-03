@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { HiHome, HiTrophy, HiBookOpen, HiShoppingBag, HiUser, HiAcademicCap, HiXMark } from 'react-icons/hi2'
+import { HiHome, HiTrophy, HiBookOpen, HiShoppingBag, HiUser, HiAcademicCap, HiXMark, HiCog6Tooth } from 'react-icons/hi2'
 import { FaXTwitter, FaGithub } from 'react-icons/fa6'
+import { useSound } from '../contexts/SoundContext'
+import SettingsModal from './SettingsModal'
 import logo from '../assets/logo.png'
 
 function Sidebar() {
     const navigate = useNavigate()
     const location = useLocation()
+    const { playSFX, setIsSettingsOpen } = useSound()
 
     const [showPromo, setShowPromo] = useState(() => {
         return sessionStorage.getItem('poyehali_sidebar_promo_dismissed') !== 'true'
@@ -16,6 +19,7 @@ function Sidebar() {
     const handleClosePromo = (e) => {
         e.preventDefault()
         e.stopPropagation()
+        playSFX('nav_click.mp3')
         setShowPromo(false)
         sessionStorage.setItem('poyehali_sidebar_promo_dismissed', 'true')
     }
@@ -75,7 +79,12 @@ function Sidebar() {
                     return (
                         <button
                             key={item.label}
-                            onClick={() => !item.disabled && navigate(item.path)}
+                            onClick={() => {
+                                if (!item.disabled) {
+                                    playSFX('nav_click.mp3')
+                                    navigate(item.path)
+                                }
+                            }}
                             disabled={item.disabled}
                             className={`
                 w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200
@@ -149,7 +158,20 @@ function Sidebar() {
                         Takip Et
                     </span>
                 </a>
+                <button
+                    onClick={() => {
+                        playSFX('nav_click.mp3')
+                        setIsSettingsOpen(true)
+                    }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 group w-full"
+                >
+                    <HiCog6Tooth className="w-5 h-5 group-hover:text-orange-500 transition-colors" />
+                    <span className="font-bold text-xs tracking-widest uppercase group-hover:text-slate-800 dark:group-hover:text-white transition-colors text-left font-bold">
+                        Ayarlar
+                    </span>
+                </button>
             </div>
+
         </div>
     )
 }

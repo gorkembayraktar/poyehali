@@ -4,29 +4,16 @@ import { HiSpeakerWave, HiChevronRight, HiExclamationTriangle } from 'react-icon
 import { useSound } from '../../contexts/SoundContext'
 
 function IntroductionCard({ letter, onNext, index, total }) {
-    const { isMuted } = useSound()
+    const { settings, playSFX, playVoice } = useSound()
     const [isPlaying, setIsPlaying] = useState(false)
     const [hasListened, setHasListened] = useState(false)
 
     const playAudio = () => {
-        if ('speechSynthesis' in window) {
-            if (isMuted) {
-                setHasListened(true)
-                return
-            }
-            setIsPlaying(true)
-            setHasListened(true)
-
-            const utterance = new SpeechSynthesisUtterance(letter.letter)
-            utterance.lang = 'ru-RU'
-            utterance.rate = 0.7
-            utterance.pitch = 1
-            utterance.onend = () => setIsPlaying(false)
-            utterance.onerror = () => setIsPlaying(false)
-
-            speechSynthesis.cancel()
-            speechSynthesis.speak(utterance)
-        }
+        setIsPlaying(true)
+        setHasListened(true)
+        playVoice(letter.letter)
+        // Simple timer to mimic onend for animation
+        setTimeout(() => setIsPlaying(false), 800)
     }
 
     // Auto-play on mount
@@ -174,15 +161,7 @@ function IntroductionCard({ letter, onNext, index, total }) {
                                 </span>
                             </div>
                             <button
-                                onClick={() => {
-                                    if ('speechSynthesis' in window) {
-                                        const utterance = new SpeechSynthesisUtterance(letter.example.word)
-                                        utterance.lang = 'ru-RU'
-                                        utterance.rate = 0.7
-                                        speechSynthesis.cancel()
-                                        speechSynthesis.speak(utterance)
-                                    }
-                                }}
+                                onClick={() => playVoice(letter.example.word)}
                                 className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                             >
                                 <HiSpeakerWave className="w-5 h-5 text-slate-500" />
@@ -196,7 +175,10 @@ function IntroductionCard({ letter, onNext, index, total }) {
 
                 {/* Continue button */}
                 <motion.button
-                    onClick={onNext}
+                    onClick={() => {
+                        playSFX('nav_click.mp3')
+                        onNext()
+                    }}
                     disabled={!hasListened}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}

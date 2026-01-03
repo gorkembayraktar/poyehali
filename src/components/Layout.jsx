@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { HiFire, HiSparkles, HiSun, HiMoon, HiShare, HiBars3 } from 'react-icons/hi2'
+import { HiFire, HiSparkles, HiSun, HiMoon, HiShare, HiBars3, HiCog6Tooth } from 'react-icons/hi2'
 import { FaXTwitter, FaGithub } from 'react-icons/fa6'
 import Sidebar from './Sidebar'
 import RightSidebar from './RightSidebar'
@@ -10,11 +10,14 @@ import { useProgress } from '../contexts/ProgressContext'
 import { useTheme } from '../contexts/ThemeContext'
 import { useState, useEffect } from 'react'
 import ShareModal from './ShareModal'
+import SettingsModal from './SettingsModal'
+import { useSound } from '../contexts/SoundContext'
 
 function Layout({ children }) {
   const location = useLocation()
   const { streak, totalXP } = useProgress()
   const { theme, toggleTheme } = useTheme()
+  const { isSettingsOpen, setIsSettingsOpen } = useSound()
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false)
 
@@ -30,21 +33,15 @@ function Layout({ children }) {
       color: 'text-orange-500'
     },
     {
+      label: 'Sistem Ayarları',
+      icon: HiCog6Tooth,
+      onClick: () => { setIsSettingsOpen(true); setIsActionMenuOpen(false); },
+      color: 'text-slate-700 dark:text-slate-200'
+    },
+    {
       label: 'GitHub',
       icon: FaGithub,
       href: 'https://github.com/gorkembayraktar/poyehali',
-      color: 'text-slate-700 dark:text-slate-200'
-    },
-    {
-      label: 'X (Twitter)',
-      icon: FaXTwitter,
-      href: 'https://x.com',
-      color: 'text-slate-700 dark:text-slate-200'
-    },
-    {
-      label: theme === 'light' ? 'Koyu Tema' : 'Açık Tema',
-      icon: theme === 'light' ? HiMoon : HiSun,
-      onClick: () => { toggleTheme(); setIsActionMenuOpen(false); },
       color: 'text-slate-700 dark:text-slate-200'
     }
   ]
@@ -181,6 +178,7 @@ function Layout({ children }) {
         onClose={() => setIsShareModalOpen(false)}
         stats={{ streak: streak.current, totalXP }}
       />
+      <SettingsModal />
     </div>
   )
 }

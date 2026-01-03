@@ -4,26 +4,16 @@ import { HiSpeakerWave, HiCheckCircle, HiXCircle, HiSpeakerXMark } from 'react-i
 import { useSound } from '../../contexts/SoundContext'
 
 function SoundMatchCard({ letter, options, onAnswer, onSkip, index, total }) {
-    const { isMuted } = useSound()
+    const { playSFX, playVoice } = useSound()
     const [selectedOption, setSelectedOption] = useState(null)
     const [showResult, setShowResult] = useState(false)
     const [isPlaying, setIsPlaying] = useState(false)
 
     const playSound = () => {
-        if ('speechSynthesis' in window) {
-            if (isMuted) return
-            setIsPlaying(true)
-
-            const utterance = new SpeechSynthesisUtterance(letter.letter)
-            utterance.lang = 'ru-RU'
-            utterance.rate = 0.7
-            utterance.pitch = 1
-            utterance.onend = () => setIsPlaying(false)
-            utterance.onerror = () => setIsPlaying(false)
-
-            speechSynthesis.cancel()
-            speechSynthesis.speak(utterance)
-        }
+        setIsPlaying(true)
+        playVoice(letter.letter)
+        // Simple timer for animation state
+        setTimeout(() => setIsPlaying(false), 800)
     }
 
     // Auto-play on mount
@@ -39,6 +29,12 @@ function SoundMatchCard({ letter, options, onAnswer, onSkip, index, total }) {
         setShowResult(true)
 
         const isCorrect = option === letter.turkish
+
+        if (isCorrect) {
+            playSFX('correct.mp3')
+        } else {
+            playSFX('wrong.mp3')
+        }
 
         // Auto-advance after delay
         setTimeout(() => {
@@ -148,7 +144,10 @@ function SoundMatchCard({ letter, options, onAnswer, onSkip, index, total }) {
                 {/* Skip option */}
                 {!showResult && (
                     <button
-                        onClick={onSkip}
+                        onClick={() => {
+                            playSFX('nav_click.mp3')
+                            onSkip()
+                        }}
                         className="w-full py-3 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:border-slate-400 transition-all flex items-center justify-center gap-2 text-sm font-medium"
                     >
                         <HiSpeakerXMark className="w-4 h-4" />

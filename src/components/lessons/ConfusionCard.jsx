@@ -4,7 +4,7 @@ import { HiExclamationTriangle, HiCheckCircle, HiXCircle, HiSpeakerWave } from '
 import { useSound } from '../../contexts/SoundContext'
 
 function ConfusionCard({ confusion, onAnswer, index, total }) {
-    const { isMuted } = useSound()
+    const { playSFX, playVoice } = useSound()
     const [selectedOption, setSelectedOption] = useState(null)
     const [showResult, setShowResult] = useState(false)
 
@@ -18,20 +18,19 @@ function ConfusionCard({ confusion, onAnswer, index, total }) {
 
         const isCorrect = option === confusion.actualSound
 
+        if (isCorrect) {
+            playSFX('correct.mp3')
+        } else {
+            playSFX('wrong.mp3')
+        }
+
         setTimeout(() => {
             onAnswer(isCorrect)
         }, isCorrect ? 1200 : 2000)
     }
 
     const playSound = () => {
-        if ('speechSynthesis' in window) {
-            if (isMuted) return
-            const utterance = new SpeechSynthesisUtterance(confusion.russian)
-            utterance.lang = 'ru-RU'
-            utterance.rate = 0.6
-            speechSynthesis.cancel()
-            speechSynthesis.speak(utterance)
-        }
+        playVoice(confusion.russian)
     }
 
     const isCorrect = selectedOption === confusion.actualSound

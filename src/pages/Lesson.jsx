@@ -286,6 +286,12 @@ function Lesson() {
         setIsComplete(true)
 
         const passed = lesson.type === 'practice' ? true : completeLesson(lessonId, score)
+
+        if (passed) {
+            playSFX('lesson_success.mp3')
+        } else {
+            playSFX('lesson_fail.mp3')
+        }
     }
 
     // Handle exit

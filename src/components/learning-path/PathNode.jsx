@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { HiLockClosed, HiCheck, HiSparkles } from 'react-icons/hi2'
 import { useProgress } from '../../contexts/ProgressContext'
+import { useSound } from '../../contexts/SoundContext'
 import { lessonIcons } from '../../constants/icons'
 
 const colorClasses = {
@@ -93,10 +94,12 @@ function PathNode({ lesson, onClick, index }) {
         }
     }
 
+    const { playSFX } = useSound()
     const styles = getNodeStyles()
 
     const handleClick = () => {
         if (state !== 'locked') {
+            playSFX('nav_click.mp3')
             onClick(lesson)
         }
     }

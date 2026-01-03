@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiSpeakerWave, HiChevronRight, HiPause, HiPlay } from 'react-icons/hi2'
+import { useSound } from '../contexts/SoundContext'
 
 function LearnCard({ item, onNext, autoAdvanceDelay = 4000 }) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [timeLeft, setTimeLeft] = useState(autoAdvanceDelay / 1000)
   const [progress, setProgress] = useState(100)
+  const { playSFX, playVoice } = useSound()
+
+  useEffect(() => {
+    // Play whoosh when a new card appears
+    playSFX('whoosh.mp3')
+  }, [item.russian, playSFX])
 
   useEffect(() => {
     if (isPaused) return
@@ -32,20 +39,16 @@ function LearnCard({ item, onNext, autoAdvanceDelay = 4000 }) {
 
   const playAudio = (e) => {
     e?.stopPropagation()
-    if ('speechSynthesis' in window) {
-      setIsPlaying(true)
-      const utterance = new SpeechSynthesisUtterance(item.russian)
-      utterance.lang = 'ru-RU'
-      utterance.rate = 0.8
-      utterance.pitch = 1
-      utterance.onend = () => setIsPlaying(false)
-      utterance.onerror = () => setIsPlaying(false)
-      speechSynthesis.cancel()
-      speechSynthesis.speak(utterance)
-    }
+    setIsPlaying(true)
+    playVoice(item.russian)
+    // Small delay to reset icon state since TTS doesn't give us onEnd easily through playVoice wrapper
+    setTimeout(() => setIsPlaying(false), 1000)
   }
 
-  const togglePause = () => setIsPaused(!isPaused)
+  const togglePause = () => {
+    playSFX('nav_click.mp3')
+    setIsPaused(!isPaused)
+  }
 
   return (
     <div className="w-full max-w-lg mx-auto">
@@ -142,7 +145,10 @@ function LearnCard({ item, onNext, autoAdvanceDelay = 4000 }) {
       {/* Manual Navigation */}
       <div className="mt-8 flex justify-center">
         <motion.button
-          onClick={onNext}
+          onClick={() => {
+            playSFX('nav_click.mp3')
+            onNext()
+          }}
           whileHover={{ x: 4 }}
           className="group flex items-center gap-2 px-6 py-3 rounded-full hover:bg-white/50 dark:hover:bg-white/5 transition-colors text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium"
         >

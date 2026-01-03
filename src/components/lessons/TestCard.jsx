@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { HiCheckCircle, HiXCircle, HiChevronRight } from 'react-icons/hi2'
+import { useSound } from '../../contexts/SoundContext'
 
 function TestCard({ question, onAnswer, index, total, isGate = false }) {
     const [selectedOption, setSelectedOption] = useState(null)
     const [showResult, setShowResult] = useState(false)
+    const { playSFX } = useSound()
 
     const handleOptionClick = (option) => {
         if (showResult) return
@@ -14,6 +16,12 @@ function TestCard({ question, onAnswer, index, total, isGate = false }) {
 
         const correct = option === question.correct
 
+        if (correct) {
+            playSFX('correct.mp3')
+        } else {
+            playSFX('wrong.mp3')
+        }
+
         // Auto-advance after delay
         setTimeout(() => {
             onAnswer(correct)
@@ -21,6 +29,7 @@ function TestCard({ question, onAnswer, index, total, isGate = false }) {
     }
 
     const handleNext = () => {
+        playSFX('nav_click.mp3')
         const isCorrect = selectedOption === question.correct
         onAnswer(isCorrect)
     }

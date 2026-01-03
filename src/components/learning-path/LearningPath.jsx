@@ -5,11 +5,13 @@ import { HiSparkles, HiFire, HiAcademicCap, HiBookOpen, HiSpeakerWave, HiExclama
 import { learningPath, sections } from '../../data/learningPath'
 import { lessonIcons, sectionIcons } from '../../constants/icons'
 import { useProgress } from '../../contexts/ProgressContext'
+import { useSound } from '../../contexts/SoundContext'
 import PathNode from './PathNode'
 
-function LearningPath() {
+const LearningPath = () => {
     const navigate = useNavigate()
     const { getLessonState, getOverallProgress, streak, masterSection, masteredSections, getActiveLesson } = useProgress()
+    const { playSFX } = useSound()
     const overallProgress = getOverallProgress()
     const activeLesson = getActiveLesson()
     const activeNodeRef = useRef(null)
@@ -54,17 +56,30 @@ function LearningPath() {
         }
     }, [])
 
+    // Sound effects for unlocks
+    const prevUnlockedCount = useRef(0)
+    useEffect(() => {
+        const unlockedCount = learningPath.filter(l => getLessonState(l.id) !== 'locked').length
+        if (prevUnlockedCount.current > 0 && unlockedCount > prevUnlockedCount.current) {
+            playSFX('unlock.mp3')
+        }
+        prevUnlockedCount.current = unlockedCount
+    }, [getLessonState, playSFX])
+
     const handleLessonClick = (lesson) => {
         // Save scroll position for restoration when coming back
         sessionStorage.setItem('path_scroll_pos', window.scrollY.toString())
+        playSFX('nav_click.mp3')
         navigate(`/lesson/${lesson.id}`)
     }
 
     const handleMasterSection = (sectionId, title) => {
         if (confirmingMastery === sectionId) {
+            playSFX('section_master.mp3')
             masterSection(sectionId)
             setConfirmingMastery(null)
         } else {
+            playSFX('nav_click.mp3')
             setConfirmingMastery(sectionId)
             setTimeout(() => {
                 setConfirmingMastery(prev => prev === sectionId ? null : prev)

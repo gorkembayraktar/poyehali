@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiCheckCircle, HiXCircle, HiChevronRight, HiQuestionMarkCircle, HiSparkles } from 'react-icons/hi2'
+import { useSound } from '../contexts/SoundContext'
 
 function PracticeCard({ item, onNext, isCorrect, onAnswer }) {
   const [showAnswer, setShowAnswer] = useState(false)
   const [selectedOption, setSelectedOption] = useState(null)
   const [isWrong, setIsWrong] = useState(false)
+  const { playSFX } = useSound()
 
   const handleOptionClick = (option) => {
     if (showAnswer) return
@@ -16,8 +18,11 @@ function PracticeCard({ item, onNext, isCorrect, onAnswer }) {
     const correct = option === item.correct
     onAnswer(correct)
 
-    if (!correct) {
+    if (correct) {
+      playSFX('correct.mp3')
+    } else {
       setIsWrong(true)
+      playSFX('wrong.mp3')
     }
   }
 
@@ -147,7 +152,10 @@ function PracticeCard({ item, onNext, isCorrect, onAnswer }) {
               className="mt-8 flex justify-end overflow-hidden"
             >
               <motion.button
-                onClick={handleNext}
+                onClick={() => {
+                  playSFX('nav_click.mp3')
+                  handleNext()
+                }}
                 autoFocus
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
