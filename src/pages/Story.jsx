@@ -205,6 +205,13 @@ const Story = () => {
     const handleComplete = () => {
         playSFX('success.mp3')
         completeLesson(story.id, 100)
+        // Pass completed story ID to trigger scroll/sound in Stories view
+        navigate('/story', { state: { completedStoryId: story.id } })
+    }
+
+    const handleBack = () => {
+        // Save scroll position for Stories view is handled in handleStoryClick, 
+        // but here we just go back.
         navigate('/story')
     }
 
@@ -215,7 +222,7 @@ const Story = () => {
             <div className="w-full max-w-2xl px-4 py-3 bg-white dark:bg-[#121212] border-b border-slate-200 dark:border-white/5 flex items-center justify-between z-30 shadow-sm shrink-0">
                 <div className="flex items-center gap-3">
                     <button
-                        onClick={() => navigate('/story')}
+                        onClick={handleBack}
                         className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 transition-colors text-slate-500"
                     >
                         <HiArrowLeft className="w-5 h-5" />

@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useMemo } from 'react'
 import { stories } from '../../data/stories'
 import { useProgress } from '../../contexts/ProgressContext'
 import { useSound } from '../../contexts/SoundContext'
@@ -17,17 +18,78 @@ const Stories = () => {
     const { progress, isLessonUnlocked, getLessonState } = useProgress()
     const { playSFX } = useSound()
     const navigate = useNavigate()
+    const location = useLocation()
+    const storyRefs = useRef({})
 
-    const groupedStories = stories.reduce((acc, story) => {
+    // Detect completion and new unlock
+    useEffect(() => {
+        const completedStoryId = location.state?.completedStoryId
+        if (completedStoryId) {
+            const storyIndex = stories.findIndex(s => s.id === completedStoryId)
+            const nextStory = stories[storyIndex + 1]
+
+            if (nextStory && isLessonUnlocked(nextStory.id)) {
+                playSFX('unlock.mp3')
+                window.history.replaceState({}, document.title)
+
+                // First: Instant snap to the story just completed
+                if (storyRefs.current[completedStoryId]) {
+                    storyRefs.current[completedStoryId].scrollIntoView({
+                        behavior: 'auto',
+                        block: 'center'
+                    })
+                }
+
+                // Second: Short smooth scroll to the newly unlocked story
+                setTimeout(() => {
+                    if (storyRefs.current[nextStory.id]) {
+                        storyRefs.current[nextStory.id].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        })
+                    }
+                }, 100)
+            }
+        }
+    }, [location.state, isLessonUnlocked, playSFX])
+
+    // Scroll Restoration Logic
+    useEffect(() => {
+        if (!location.state?.completedStoryId) {
+            const savedScrollPos = sessionStorage.getItem('stories_scroll_pos')
+            if (savedScrollPos) {
+                const pos = parseInt(savedScrollPos)
+                setTimeout(() => {
+                    window.scrollTo(0, pos)
+                    sessionStorage.removeItem('stories_scroll_pos')
+                }, 50)
+            } else {
+                const activeStory = stories.find(s => getLessonState(s.id) === 'active')
+                if (activeStory) {
+                    setTimeout(() => {
+                        if (storyRefs.current[activeStory.id]) {
+                            storyRefs.current[activeStory.id].scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            })
+                        }
+                    }, 500)
+                }
+            }
+        }
+    }, [])
+
+    const groupedStories = useMemo(() => stories.reduce((acc, story) => {
         if (!acc[story.category]) acc[story.category] = []
         acc[story.category].push(story)
         return acc
-    }, {})
+    }, {}), [])
 
-    const categories = Object.keys(groupedStories)
+    const categories = useMemo(() => Object.keys(groupedStories), [groupedStories])
 
     const handleStoryClick = (story) => {
         if (isLessonUnlocked(story.id)) {
+            sessionStorage.setItem('stories_scroll_pos', window.scrollY.toString())
             playSFX('nav_click.mp3')
             navigate(`/story/${story.id}`)
         } else {
@@ -67,7 +129,7 @@ const Stories = () => {
                                 const isLastInCat = index === storiesInCat.length - 1
 
                                 return (
-                                    <div key={story.id} className="relative">
+                                    <div key={story.id} className="relative" ref={el => storyRefs.current[story.id] = el}>
                                         <div className={`flex items-center ${isLeft ? 'justify-start' : 'justify-end'}`}>
                                             <div className={`${isLeft ? 'ml-8 md:ml-16' : 'mr-8 md:mr-16'}`}>
                                                 <StoryNode
@@ -97,7 +159,7 @@ const Stories = () => {
                                                     strokeLinecap="round"
                                                     className="dark:stroke-slate-600 drop-shadow-sm transition-colors duration-500"
                                                 />
-                                                {completed && index + 1 < storiesInCat.length && isLessonUnlocked(storiesInCat[index + 1].id) && (
+                                                {completed && index + 1 < storiesInCat.length && getLessonState(storiesInCat[index + 1].id) !== 'completed' && isLessonUnlocked(storiesInCat[index + 1].id) && (
                                                     <motion.circle
                                                         r="6"
                                                         fill="#f97316"
