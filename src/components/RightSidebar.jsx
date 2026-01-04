@@ -89,7 +89,7 @@ function RightSidebar() {
                 </div>
             </div>
 
-            {/* Footer Widget */}
+            {/* Footer Widget 
             <div className="mt-auto glass-card p-4 rounded-2xl border-2 border-slate-200 dark:border-white/5 border-dashed min-h-[120px] flex items-center justify-center text-center">
                 <div>
                     <p className="font-bold text-slate-400 dark:text-slate-500 mb-2 text-sm italic leading-relaxed">
@@ -97,7 +97,7 @@ function RightSidebar() {
                     </p>
                 </div>
             </div>
-
+*/}
             <ShareModal
                 isOpen={isShareModalOpen}
                 onClose={() => setIsShareModalOpen(false)}
