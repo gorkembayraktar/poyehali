@@ -89,16 +89,15 @@ const StoryNode = ({ story, unlocked, completed, onClick, index }) => {
                     {!unlocked ? (
                         <HiLockClosed className="w-7 h-7" />
                     ) : (
-                        <>
-                            {iconMap[story.icon] || story.icon}
-                            {completed && (
-                                <div className="absolute -top-1 -right-1 w-7 h-7 bg-emerald-500 rounded-full border-2 border-white dark:border-[#0a0a0a] flex items-center justify-center shadow-lg">
-                                    <HiCheck className="w-4 h-4 text-white" />
-                                </div>
-                            )}
-                        </>
+                        iconMap[story.icon] || story.icon
                     )}
                 </div>
+
+                {unlocked && completed && (
+                    <div className="absolute top-0 right-0 -mr-1 -mt-1 w-7 h-7 bg-emerald-500 rounded-full border-2 border-white dark:border-[#0a0a0a] flex items-center justify-center shadow-lg z-10">
+                        <HiCheck className="w-4 h-4 text-white" />
+                    </div>
+                )}
 
                 {/* Active pulse animation */}
                 {unlocked && !completed && (

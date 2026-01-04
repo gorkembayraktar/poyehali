@@ -127,7 +127,7 @@ function PathNode({ lesson, onClick, index }) {
                 {state === 'locked' ? (
                     <HiLockClosed className="w-6 h-6" />
                 ) : (
-                    <div className="relative flex items-center justify-center">
+                    <>
                         {IconComponent ? (
                             <IconComponent className={`${isGate ? 'w-8 h-8' : 'w-7 h-7'}`} />
                         ) : (
@@ -135,8 +135,8 @@ function PathNode({ lesson, onClick, index }) {
                         )}
 
                         {state === 'completed' && (
-                            <div className="absolute -top-3 -right-3 w-6 h-6 bg-emerald-500 rounded-full border-2 border-white dark:border-[#0f0f0f] flex items-center justify-center shadow-lg z-10">
-                                <HiCheck className="w-3.5 h-3.5 text-white" />
+                            <div className="absolute top-0 right-0 -mr-1 -mt-1 w-6 h-6 bg-emerald-500 rounded-full border-2 border-white dark:border-[#0f0f0f] flex items-center justify-center shadow-lg z-10">
+                                <HiCheck className="w-4 h-4 text-white" />
                                 {score >= 90 && (
                                     <motion.div
                                         initial={{ scale: 0 }}
@@ -148,7 +148,7 @@ function PathNode({ lesson, onClick, index }) {
                                 )}
                             </div>
                         )}
-                    </div>
+                    </>
                 )}
 
                 {/* Active pulse animation */}
