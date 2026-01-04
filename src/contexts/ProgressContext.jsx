@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { learningPath, getLessonById } from '../data/learningPath'
+import { stories } from '../data/stories'
 
 const ProgressContext = createContext()
 
@@ -41,24 +42,34 @@ export function ProgressProvider({ children }) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
     }, [progress])
 
-    // Check if a lesson is unlocked
+    // Check if a lesson (or story) is unlocked
     const isLessonUnlocked = useCallback((lessonId) => {
+        // Try to find in learning path first
         const lesson = getLessonById(lessonId)
-        if (!lesson) return false
+        if (lesson) {
+            // First lesson it always unlocked
+            if (!lesson.requires) return true
 
-        // First lesson is always unlocked
-        if (!lesson.requires) return true
+            const { lessonId: requiredLessonId, gateId, minScore } = lesson.requires
 
-        const { lessonId: requiredLessonId, gateId, minScore } = lesson.requires
+            if (requiredLessonId) {
+                const requiredCompletion = progress.completedLessons[requiredLessonId]
+                return requiredCompletion && requiredCompletion.score >= minScore
+            }
 
-        if (requiredLessonId) {
-            const requiredCompletion = progress.completedLessons[requiredLessonId]
-            return requiredCompletion && requiredCompletion.score >= minScore
+            if (gateId) {
+                const gateScore = progress.gateScores[gateId]
+                return gateScore && gateScore >= minScore
+            }
         }
 
-        if (gateId) {
-            const gateScore = progress.gateScores[gateId]
-            return gateScore && gateScore >= minScore
+        // Try to find in stories
+        const story = stories.find(s => s.id === lessonId)
+        if (story) {
+            if (!story.requires) return true
+            // Support both object { storyId } and existing lesson-like requires
+            const requiredStoryId = story.requires.storyId || story.requires.lessonId
+            return progress.completedLessons[requiredStoryId] !== undefined
         }
 
         return false
@@ -66,7 +77,7 @@ export function ProgressProvider({ children }) {
 
     // Get lesson state (locked, active, in_progress, completed)
     const getLessonState = useCallback((lessonId) => {
-        const lesson = getLessonById(lessonId)
+        const lesson = getLessonById(lessonId) || stories.find(s => s.id === lessonId)
         if (!lesson) return 'locked'
 
         // Check if completed
@@ -133,12 +144,13 @@ export function ProgressProvider({ children }) {
         }))
     }, [])
 
-    // Complete a lesson
+    // Complete a lesson or story
     const completeLesson = useCallback((lessonId, score) => {
-        const lesson = getLessonById(lessonId)
-        if (!lesson) return false
+        const item = getLessonById(lessonId) || stories.find(s => s.id === lessonId)
+        if (!item) return false
 
-        const passed = score >= lesson.passScore
+        const passScore = item.passScore || 0 // Stories don't have passScore usually
+        const passed = score >= passScore
 
         setProgress(prev => {
             const newProgress = { ...prev }
@@ -155,7 +167,7 @@ export function ProgressProvider({ children }) {
             }
 
             // If it's a gate, record gate score
-            if (lesson.type === 'gate') {
+            if (item.type === 'gate') {
                 newProgress.gateScores = {
                     ...prev.gateScores,
                     [lessonId]: Math.max(prev.gateScores[lessonId] || 0, score)
@@ -188,8 +200,9 @@ export function ProgressProvider({ children }) {
                 }
             }
 
-            // Add XP
-            newProgress.totalXP = prev.totalXP + (passed ? 50 : 10)
+            // Add XP (Stories usually have xpReward field)
+            const reward = item.xpReward || (passed ? 50 : 10)
+            newProgress.totalXP = prev.totalXP + reward
 
             return newProgress
         })
@@ -242,9 +255,16 @@ export function ProgressProvider({ children }) {
 
     // Get overall progress percentage
     const getOverallProgress = useCallback(() => {
-        const completed = Object.keys(progress.completedLessons).length
+        const completed = learningPath.filter(l => progress.completedLessons[l.id]).length
         const total = learningPath.length
         return Math.round((completed / total) * 100)
+    }, [progress.completedLessons])
+
+    // Get stories progress percentage
+    const getStoriesProgress = useCallback(() => {
+        const completed = stories.filter(s => progress.completedLessons[s.id]).length
+        const total = stories.length
+        return total > 0 ? Math.round((completed / total) * 100) : 0
     }, [progress.completedLessons])
 
     // Get section progress
@@ -272,7 +292,8 @@ export function ProgressProvider({ children }) {
         getSectionProgress,
         streak: progress.streak,
         totalXP: progress.totalXP,
-        masteredSections: progress.masteredSections
+        masteredSections: progress.masteredSections,
+        getStoriesProgress
     }
 
     return (

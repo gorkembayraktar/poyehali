@@ -126,23 +126,29 @@ function PathNode({ lesson, onClick, index }) {
                 {/* Icon */}
                 {state === 'locked' ? (
                     <HiLockClosed className="w-6 h-6" />
-                ) : state === 'completed' ? (
-                    <div className="relative">
-                        <HiCheck className="w-7 h-7" />
-                        {score >= 90 && (
-                            <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="absolute -top-1 -right-1"
-                            >
-                                <HiSparkles className="w-4 h-4 text-amber-300" />
-                            </motion.div>
+                ) : (
+                    <div className="relative flex items-center justify-center">
+                        {IconComponent ? (
+                            <IconComponent className={`${isGate ? 'w-8 h-8' : 'w-7 h-7'}`} />
+                        ) : (
+                            <span className="text-xl font-bold">{lesson.title.charAt(0)}</span>
+                        )}
+
+                        {state === 'completed' && (
+                            <div className="absolute -top-3 -right-3 w-6 h-6 bg-emerald-500 rounded-full border-2 border-white dark:border-[#0f0f0f] flex items-center justify-center shadow-lg z-10">
+                                <HiCheck className="w-3.5 h-3.5 text-white" />
+                                {score >= 90 && (
+                                    <motion.div
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                        className="absolute -top-1 -right-1"
+                                    >
+                                        <HiSparkles className="w-3 h-3 text-amber-300" />
+                                    </motion.div>
+                                )}
+                            </div>
                         )}
                     </div>
-                ) : IconComponent ? (
-                    <IconComponent className={`${isGate ? 'w-8 h-8' : 'w-7 h-7'}`} />
-                ) : (
-                    <span className="text-xl font-bold">{lesson.title.charAt(0)}</span>
                 )}
 
                 {/* Active pulse animation */}

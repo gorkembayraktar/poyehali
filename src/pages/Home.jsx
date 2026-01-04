@@ -5,9 +5,9 @@ import RightSidebar from '../components/RightSidebar'
 import LearningPath from '../components/learning-path/LearningPath'
 import BottomNav from '../components/BottomNav'
 
-function Home() {
+function Home({ view }) {
   return (
-    <LearningPath />
+    <LearningPath view={view} />
   )
 }
 
