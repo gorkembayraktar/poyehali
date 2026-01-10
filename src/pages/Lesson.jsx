@@ -30,92 +30,107 @@ function Lesson() {
 
     // Get letters for this lesson
     const letters = useMemo(() => {
-        if (!lesson) return []
+        try {
+            // Handle typo or missing ID gracefully
+            if (!lessonId || lessonId === 'number_2') return []
 
-        // Manual letters override
-        if (lesson.letters) {
-            return alphabet.filter(l => lesson.letters.includes(l.letter))
+            if (!lesson) return []
+
+            // Safety check for critical data
+            if (!alphabet) {
+                console.error('CRITICAL: Alphabet data is missing!')
+                return []
+            }
+
+            // Manual letters override
+            if (lesson.letters) {
+                return alphabet.filter(l => lesson.letters.includes(l.letter))
+            }
+
+            // Section: Alphabet logic
+            if (lesson.section === 'alphabet') {
+                if (lesson.type === 'gate') {
+                    return alphabet // Use all 33 letters for Alphabet Gate
+                }
+                const levelMatch = lesson.id.match(/alphabet_(\d+)/)
+                if (levelMatch) {
+                    return getLettersByLevel(parseInt(levelMatch[1]))
+                }
+            }
+
+            // Section: Phonetics logic
+            if (lesson.section === 'phonetics') {
+                if (lesson.id === 'phonetic_1') {
+                    // Vowels Only
+                    return alphabet.filter(l => ['А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я'].includes(l.letter))
+                }
+                if (lesson.id === 'phonetic_2') {
+                    // Consonants (excluding signs)
+                    return alphabet.filter(l => !['А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я', 'Ъ', 'Ь'].includes(l.letter)).slice(0, 10)
+                }
+                if (lesson.id === 'phonetic_3') {
+                    // Difficult sounds
+                    return alphabet.filter(l => ['Ж', 'Ш', 'Щ', 'Ц', 'Ч'].includes(l.letter))
+                }
+                if (lesson.type === 'gate') {
+                    return alphabet.slice(0, 20) // Mixed for phonetic gate
+                }
+            }
+
+            // Section: Confusion Mastery logic
+            if (lesson.section === 'confusion') {
+                if (lesson.confusionSet) {
+                    return alphabet.filter(l => lesson.confusionSet.includes(l.letter))
+                }
+                return alphabet.filter(l => l.confusionLevel === 'critical' || l.confusionLevel === 'high')
+            }
+
+            // Section: Vocabulary logic
+            if (lesson.section === 'vocabulary' || lesson.section === 'practice') {
+                let source = []
+
+                if (lesson.id === 'daily_loop') {
+                    // Aggregate all vocabulary sources for daily practice
+                    const safeNumbers = Array.isArray(numbers) ? numbers : []
+                    const safeColors = Array.isArray(colors) ? colors : []
+                    const safeWords = Array.isArray(dailyWords) ? dailyWords : []
+                    const safePeople = Array.isArray(peopleAndTitles) ? peopleAndTitles : []
+                    const safeDayTime = Array.isArray(dayAndTime) ? dayAndTime : []
+                    const safeVerbs = Array.isArray(basicVerbs) ? basicVerbs : []
+                    const safeEmotions = Array.isArray(emotionsStates) ? emotionsStates : []
+                    const safePhrases = Array.isArray(simplePhrases) ? simplePhrases : []
+
+                    source = shuffleArray([...safeNumbers, ...safeColors, ...safeWords, ...safePeople, ...safeDayTime, ...safeVerbs, ...safeEmotions, ...safePhrases]).slice(0, 20)
+                } else {
+                    if (lesson.id === 'numbers_1') source = (numbers || []).slice(0, 10)
+                    if (lesson.id === 'numbers_2') source = (numbers || []).slice(10)
+                    if (lesson.id === 'colors') source = colors || []
+                    if (lesson.id === 'daily_words') source = dailyWords || []
+                    if (lesson.id === 'people_titles') source = peopleAndTitles || []
+                    if (lesson.id === 'day_time') source = dayAndTime || []
+                    if (lesson.id === 'basic_verbs') source = basicVerbs || []
+                    if (lesson.id === 'emotions_states') source = emotionsStates || []
+                    if (lesson.id === 'simple_phrases') source = simplePhrases || []
+                }
+
+                // Normalize vocabulary data to match letter structure
+                if (!source) return []
+                return source.map(item => ({
+                    letter: item.russian,
+                    turkish: item.correct,
+                    sound: item.transcription,
+                    transcription: item.transcription,
+                    visual: item.visual,
+                    isVocabulary: true
+                }))
+            }
+
+            return []
+        } catch (error) {
+            console.error('Error generating letters:', error)
+            return []
         }
-
-        // Section: Alphabet logic
-        if (lesson.section === 'alphabet') {
-            if (lesson.type === 'gate') {
-                return alphabet // Use all 33 letters for Alphabet Gate
-            }
-            const levelMatch = lesson.id.match(/alphabet_(\d+)/)
-            if (levelMatch) {
-                return getLettersByLevel(parseInt(levelMatch[1]))
-            }
-        }
-
-        // Section: Phonetics logic
-        if (lesson.section === 'phonetics') {
-            if (lesson.id === 'phonetic_1') {
-                // Vowels Only
-                return alphabet.filter(l => ['А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я'].includes(l.letter))
-            }
-            if (lesson.id === 'phonetic_2') {
-                // Consonants (excluding signs)
-                return alphabet.filter(l => !['А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я', 'Ъ', 'Ь'].includes(l.letter)).slice(0, 10)
-            }
-            if (lesson.id === 'phonetic_3') {
-                // Difficult sounds
-                return alphabet.filter(l => ['Ж', 'Ш', 'Щ', 'Ц', 'Ч'].includes(l.letter))
-            }
-            if (lesson.type === 'gate') {
-                return alphabet.slice(0, 20) // Mixed for phonetic gate
-            }
-        }
-
-        // Section: Confusion Mastery logic
-        if (lesson.section === 'confusion') {
-            if (lesson.confusionSet) {
-                return alphabet.filter(l => lesson.confusionSet.includes(l.letter))
-            }
-            return alphabet.filter(l => l.confusionLevel === 'critical' || l.confusionLevel === 'high')
-        }
-
-        // Section: Vocabulary logic
-        if (lesson.section === 'vocabulary' || lesson.section === 'practice') {
-            let source = []
-
-            if (lesson.id === 'daily_loop') {
-                // Aggregate all vocabulary sources for daily practice
-                const safeNumbers = Array.isArray(numbers) ? numbers : []
-                const safeColors = Array.isArray(colors) ? colors : []
-                const safeWords = Array.isArray(dailyWords) ? dailyWords : []
-                const safePeople = Array.isArray(peopleAndTitles) ? peopleAndTitles : []
-                const safeDayTime = Array.isArray(dayAndTime) ? dayAndTime : []
-                const safeVerbs = Array.isArray(basicVerbs) ? basicVerbs : []
-                const safeEmotions = Array.isArray(emotionsStates) ? emotionsStates : []
-                const safePhrases = Array.isArray(simplePhrases) ? simplePhrases : []
-
-                source = shuffleArray([...safeNumbers, ...safeColors, ...safeWords, ...safePeople, ...safeDayTime, ...safeVerbs, ...safeEmotions, ...safePhrases]).slice(0, 20)
-            } else {
-                if (lesson.id === 'numbers_1') source = (numbers || []).slice(0, 10)
-                if (lesson.id === 'numbers_2') source = (numbers || []).slice(10)
-                if (lesson.id === 'colors') source = colors || []
-                if (lesson.id === 'daily_words') source = dailyWords || []
-                if (lesson.id === 'people_titles') source = peopleAndTitles || []
-                if (lesson.id === 'day_time') source = dayAndTime || []
-                if (lesson.id === 'basic_verbs') source = basicVerbs || []
-                if (lesson.id === 'emotions_states') source = emotionsStates || []
-                if (lesson.id === 'simple_phrases') source = simplePhrases || []
-            }
-
-            // Normalize vocabulary data to match letter structure
-            return source.map(item => ({
-                letter: item.russian,
-                turkish: item.correct,
-                sound: item.transcription,
-                transcription: item.transcription,
-                visual: item.visual,
-                isVocabulary: true
-            }))
-        }
-
-        return []
-    }, [lesson])
+    }, [lesson, lessonId])
 
     // Get confusion items for this lesson
     const confusions = useMemo(() => {
@@ -160,13 +175,21 @@ function Lesson() {
 
     // Initialize lesson and sync progress
     useEffect(() => {
+        // Auto-fix for common typo
+        if (lessonId === 'number_2') {
+            navigate('/lesson/numbers_2', { replace: true })
+            return
+        }
+
         if (!lesson) {
             navigate('/')
             return
         }
 
         if (!isLessonUnlocked(lessonId)) {
-            navigate('/')
+            // Show locked message instead of silent redirect
+            playSFX('wrong.mp3') // Optional feedback
+            setTimeout(() => navigate('/'), 2000)
             return
         }
 
@@ -308,6 +331,31 @@ function Lesson() {
     }
 
     if (!lesson) return null
+
+    // Handle locked state visually if we haven't redirected yet
+    if (!isLessonUnlocked(lessonId) && lessonId !== 'number_2') {
+        return (
+            <div className="min-h-screen flex items-center justify-center p-4">
+                <div className="glass-card rounded-[2rem] p-8 max-w-md w-full text-center">
+                    <HiLockClosed className="w-16 h-16 mx-auto mb-4 text-slate-400" />
+                    <h2 className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2">Ders Kilitli</h2>
+                    <p className="text-slate-500">Bu derse erişmek için öncekileri tamamlamalısın.</p>
+                </div>
+            </div>
+        )
+    }
+
+    if ((!letters || letters.length === 0) && stage !== 'custom') {
+        return (
+            <div className="min-h-screen flex items-center justify-center p-4">
+                <div className="glass-card rounded-[2rem] p-8 max-w-md w-full text-center">
+                    <HiExclamationTriangle className="w-16 h-16 mx-auto mb-4 text-amber-500" />
+                    <h2 className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2">İçerik Bulunamadı</h2>
+                    <p className="text-slate-500">Ders içeriği yüklenirken bir hata oluştu.</p>
+                </div>
+            </div>
+        )
+    }
 
     // Completion screen
     if (isComplete) {

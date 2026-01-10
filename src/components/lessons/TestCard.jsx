@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { HiCheckCircle, HiXCircle, HiChevronRight } from 'react-icons/hi2'
 import { useSound } from '../../contexts/SoundContext'
@@ -6,7 +6,7 @@ import { useSound } from '../../contexts/SoundContext'
 function TestCard({ question, onAnswer, index, total, isGate = false }) {
     const [selectedOption, setSelectedOption] = useState(null)
     const [showResult, setShowResult] = useState(false)
-    const { playSFX } = useSound()
+    const { playSFX, playVoice } = useSound()
 
     const handleOptionClick = (option) => {
         if (showResult) return
@@ -33,6 +33,16 @@ function TestCard({ question, onAnswer, index, total, isGate = false }) {
         const isCorrect = selectedOption === question.correct
         onAnswer(isCorrect)
     }
+
+    const playAudio = () => {
+        playVoice(question.letter)
+    }
+
+    // Auto-play on mount or when question changes
+    useEffect(() => {
+        const timer = setTimeout(playAudio, 500)
+        return () => clearTimeout(timer)
+    }, [question])
 
     const isCorrect = selectedOption === question.correct
 
@@ -66,11 +76,16 @@ function TestCard({ question, onAnswer, index, total, isGate = false }) {
 
                 {/* Question */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 mb-4">
+                    <motion.button
+                        onClick={playAudio}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 mb-4 cursor-pointer hover:shadow-lg transition-shadow"
+                    >
                         <span className={`font-black text-gradient ${question.letter.length > 8 ? 'text-2xl' : question.letter.length > 5 ? 'text-3xl' : 'text-5xl'}`}>
                             {question.letter}
                         </span>
-                    </div>
+                    </motion.button>
                     <p className="text-lg text-slate-600 dark:text-slate-300">
                         {question.questionText || 'Bu harf hangi sesi çıkarır?'}
                     </p>
