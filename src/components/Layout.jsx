@@ -22,7 +22,18 @@ function Layout({ children }) {
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false)
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    // Check if we should restore scroll position for a lesson
+    const clickedLessonId = sessionStorage.getItem('clicked_lesson_id')
+    const clickedLessonTs = sessionStorage.getItem('clicked_lesson_ts')
+    const clickedViewPath = sessionStorage.getItem('clicked_view_path')
+    const isRecent = clickedLessonTs && (Date.now() - parseInt(clickedLessonTs) < 3600000)
+    const isSameView = clickedViewPath === location.pathname
+
+    // Only scroll to top if we're NOT in a restoration flow
+    // Restoration only happens if we have an ID, it's recent, AND we are back on the same view
+    if (!clickedLessonId || !isRecent || !isSameView) {
+      window.scrollTo(0, 0)
+    }
   }, [location.pathname])
 
   const menuActions = [

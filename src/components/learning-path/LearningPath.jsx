@@ -10,7 +10,7 @@ import PathNode from './PathNode'
 import PathProgress from './PathProgress'
 import Stories from './Stories'
 
-const LearningPath = ({ view }) => {
+const LearningPath = ({ view, sections: propSections }) => {
     const navigate = useNavigate()
     const { getLessonState, getOverallProgress, getStoriesProgress, streak, masterSection, masteredSections, getActiveLesson } = useProgress()
     const { playSFX } = useSound()
@@ -21,75 +21,6 @@ const LearningPath = ({ view }) => {
     const [confirmingMastery, setConfirmingMastery] = useState(null)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-    // Auto-scroll logic
-    useEffect(() => {
-        // Prevent browser's default scroll restoration to avoid conflicts
-        if ('scrollRestoration' in window.history) {
-            window.history.scrollRestoration = 'manual'
-        }
-
-        const savedScrollPos = sessionStorage.getItem('path_scroll_pos')
-
-        if (savedScrollPos) {
-            const pos = parseInt(savedScrollPos)
-            const timer = setTimeout(() => {
-                window.scrollTo(0, pos)
-                // We keep the item for a bit longer to handle React StrictMode double-mount in dev
-                // It will be cleared on the next fresh entry or after 1 second
-                setTimeout(() => sessionStorage.removeItem('path_scroll_pos'), 1000)
-            }, 50)
-            return () => clearTimeout(timer)
-        } else {
-            // Initial/Fresh entry: Smooth scroll to active lesson
-            const timer = setTimeout(() => {
-                if (activeNodeRef.current) {
-                    activeNodeRef.current.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    })
-                }
-            }, 600)
-            return () => clearTimeout(timer)
-        }
-
-        return () => {
-            if ('scrollRestoration' in window.history) {
-                window.history.scrollRestoration = 'auto'
-            }
-        }
-    }, [])
-
-    // Sound effects for unlocks
-    const prevUnlockedCount = useRef(0)
-    useEffect(() => {
-        const unlockedCount = learningPath.filter(l => getLessonState(l.id) !== 'locked').length
-        if (prevUnlockedCount.current > 0 && unlockedCount > prevUnlockedCount.current) {
-            playSFX('unlock.mp3')
-        }
-        prevUnlockedCount.current = unlockedCount
-    }, [getLessonState, playSFX])
-
-    const handleLessonClick = (lesson) => {
-        // Save scroll position for restoration when coming back
-        sessionStorage.setItem('path_scroll_pos', window.scrollY.toString())
-        playSFX('nav_click.mp3')
-        navigate(`/lesson/${lesson.id}`)
-    }
-
-    const handleMasterSection = (sectionId, title) => {
-        if (confirmingMastery === sectionId) {
-            playSFX('section_master.mp3')
-            masterSection(sectionId)
-            setConfirmingMastery(null)
-        } else {
-            playSFX('nav_click.mp3')
-            setConfirmingMastery(sectionId)
-            setTimeout(() => {
-                setConfirmingMastery(prev => prev === sectionId ? null : prev)
-            }, 3000)
-        }
-    }
-
     const groupedLessons = learningPath.reduce((acc, lesson) => {
         const section = lesson.section
         if (!acc[section]) {
@@ -99,7 +30,127 @@ const LearningPath = ({ view }) => {
         return acc
     }, {})
 
-    const sectionOrder = ['alphabet', 'phonetics', 'confusion', 'vocabulary', 'practice']
+    // Determine which sections to show based on prop or view
+    const sectionOrder = propSections || ['alphabet', 'phonetics', 'confusion', 'vocabulary', 'practice']
+
+    // Flatten lessons for currently visible sections to find boundaries
+    const viewLessons = sectionOrder.flatMap(key => groupedLessons[key] || [])
+
+    // Determine the "smart" target lesson to scroll to for this view
+    const targetScrollLessonId = (() => {
+        if (!activeLesson || viewLessons.length === 0) return null
+
+        // 1. If global active lesson is in this view, that's our target
+        const isActiveInView = viewLessons.find(l => l.id === activeLesson.id)
+        if (isActiveInView) return activeLesson.id
+
+        // 2. If not, check if we are "past" this view or "before" it
+        const activeGlobalIndex = learningPath.findIndex(l => l.id === activeLesson.id)
+        const firstViewLesson = viewLessons[0]
+        const lastViewLesson = viewLessons[viewLessons.length - 1]
+
+        if (!firstViewLesson || !lastViewLesson) return null
+
+        const firstViewGlobalIndex = learningPath.findIndex(l => l.id === firstViewLesson.id)
+        const lastViewGlobalIndex = learningPath.findIndex(l => l.id === lastViewLesson.id)
+
+        // If global pointer is beyond this view -> Show the end (Mastery)
+        if (activeGlobalIndex > lastViewGlobalIndex) {
+            return lastViewLesson.id
+        }
+
+        // If global pointer is before this view -> Show the start
+        if (activeGlobalIndex < firstViewGlobalIndex) {
+            return firstViewLesson.id
+        }
+
+        return viewLessons[0].id
+    })()
+
+    useEffect(() => {
+        const clickedLessonId = sessionStorage.getItem('clicked_lesson_id')
+        const clickedLessonTs = sessionStorage.getItem('clicked_lesson_ts')
+        const clickedViewPath = sessionStorage.getItem('clicked_view_path')
+        const savedPos = sessionStorage.getItem('path_scroll_pos')
+
+        const isRecent = clickedLessonTs && (Date.now() - parseInt(clickedLessonTs) < 3600000)
+        const isSameView = clickedViewPath === location.pathname
+
+        // Helper to clear all scroll-related storage
+        const clearScrollStorage = () => {
+            sessionStorage.removeItem('clicked_lesson_id')
+            sessionStorage.removeItem('clicked_lesson_ts')
+            sessionStorage.removeItem('path_scroll_pos')
+            sessionStorage.removeItem('clicked_view_path')
+        }
+
+        if (clickedLessonId && isRecent && isSameView) {
+            // Robust polling to find the element even if rendering is delayed
+            let attempts = 0
+            const maxAttempts = 20 // 1 second total (20 * 50ms)
+
+            const pollForElement = setInterval(() => {
+                const element = document.getElementById(`lesson-node-${clickedLessonId}`)
+                // console.log('Scroll Restore Polling:', { attempt: attempts, found: !!element })
+
+                if (element) {
+                    element.scrollIntoView({ behavior: 'auto', block: 'center' })
+                    clearInterval(pollForElement)
+                    clearScrollStorage() // Success! Clean up immediately
+                }
+
+                attempts++
+                if (attempts >= maxAttempts) {
+                    clearInterval(pollForElement)
+                    // Fallback if element never found
+                    if (savedPos) {
+                        window.scrollTo(0, parseInt(savedPos))
+                    }
+                    clearScrollStorage() // Failed/Timed out. Clean up.
+                }
+            }, 50)
+
+            return () => clearInterval(pollForElement)
+        } else if (savedPos && isSameView) {
+            // Context matches but no specific lesson ID (generic restore)
+            window.scrollTo(0, parseInt(savedPos))
+            clearScrollStorage()
+        } else if (targetScrollLessonId && activeNodeRef.current && !clickedLessonId) {
+            // Smart scroll (only if NOT restoring a user click)
+            const timer = setTimeout(() => {
+                activeNodeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            }, 500)
+            return () => clearTimeout(timer)
+        } else {
+            // Cleanup on mount if we have stale keys for a different view or old data
+            if (clickedLessonId || savedPos) {
+                clearScrollStorage()
+            }
+        }
+    }, [targetScrollLessonId, location.pathname])
+
+    const handleLessonClick = (lesson) => {
+        sessionStorage.setItem('path_scroll_pos', window.scrollY.toString())
+        sessionStorage.setItem('clicked_lesson_id', lesson.id)
+        sessionStorage.setItem('clicked_lesson_ts', Date.now().toString())
+        sessionStorage.setItem('clicked_view_path', location.pathname)
+        playSFX('nav_click.mp3')
+        navigate(`/lesson/${lesson.id}`)
+    }
+
+    const handleMasterSection = (sectionId, title) => {
+        if (confirmingMastery === sectionId) {
+            masterSection(sectionId)
+            playSFX('correct.mp3')
+            setConfirmingMastery(null)
+        } else {
+            setConfirmingMastery(sectionId)
+            playSFX('nav_click.mp3')
+            setTimeout(() => setConfirmingMastery(null), 3000)
+        }
+    }
+
+
 
     const isSectionComplete = (sectionId) => {
         const sectionLessons = groupedLessons[sectionId] || []
@@ -119,6 +170,14 @@ const LearningPath = ({ view }) => {
             color: 'orange'
         },
         {
+            id: 'cyrillic',
+            title: 'Kiril Alfabesi',
+            subtitle: 'Harfler & Sesler',
+            icon: HiBookOpen,
+            progress: getOverallProgress(sections['alphabet']), // Optional: custom progress calculation could be added later
+            color: 'rose'
+        },
+        {
             id: 'stories',
             title: 'Hikayeler',
             subtitle: 'Diyaloglar & Pratik',
@@ -129,22 +188,23 @@ const LearningPath = ({ view }) => {
     ]
 
     const activeViewData = menuItems.find(item => item.id === view)
-    const otherViewData = menuItems.find(item => item.id !== view)
+    const otherViewsData = menuItems.filter(item => item.id !== view)
 
     const ProgressCircle = ({ progress, size = 32, color = 'orange' }) => {
+        // ... (ProgressCircle implementation remains same)
         const radius = (size / 2) - 4
         const circumference = 2 * Math.PI * radius
         const offset = circumference - (progress / 100) * circumference
 
         const colorMap = {
             orange: 'text-orange-500',
-            emerald: 'text-emerald-500'
+            emerald: 'text-emerald-500',
+            rose: 'text-rose-500' // Added rose
         }
 
         return (
             <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
                 <svg className="transform -rotate-90" width={size} height={size}>
-                    {/* Background track */}
                     <circle
                         cx={size / 2}
                         cy={size / 2}
@@ -152,12 +212,11 @@ const LearningPath = ({ view }) => {
                         className="stroke-slate-100 dark:stroke-white/5 fill-none"
                         strokeWidth="3"
                     />
-                    {/* Progress line */}
                     <motion.circle
                         cx={size / 2}
                         cy={size / 2}
                         r={radius}
-                        className={`${colorMap[color]} fill-none`}
+                        className={`${colorMap[color] || 'text-orange-500'} fill-none`}
                         strokeWidth="3"
                         strokeDasharray={circumference}
                         initial={{ strokeDashoffset: circumference }}
@@ -187,7 +246,7 @@ const LearningPath = ({ view }) => {
                         className="w-full glass-card rounded-2xl p-4 border border-slate-200 dark:border-white/5 shadow-sm flex items-center justify-between group active:scale-95 transition-all"
                     >
                         <div className="flex items-center gap-4">
-                            <div className={`p-2.5 rounded-xl transition-colors ${activeViewData.color === 'orange' ? 'bg-orange-500' : 'bg-emerald-500'} text-white shadow-lg shadow-${activeViewData.color}-500/20`}>
+                            <div className={`p-2.5 rounded-xl transition-colors ${activeViewData.color === 'orange' ? 'bg-orange-500' : activeViewData.color === 'rose' ? 'bg-rose-500' : 'bg-emerald-500'} text-white shadow-lg shadow-${activeViewData.color}-500/20`}>
                                 <activeViewData.icon className="w-6 h-6" />
                             </div>
                             <div className="text-left">
@@ -213,32 +272,41 @@ const LearningPath = ({ view }) => {
                                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                                 className="absolute top-full left-0 right-0 mt-2 p-1.5 glass-card rounded-2xl border border-slate-200 dark:border-white/5 shadow-2xl z-50 backdrop-blur-xl overflow-hidden"
                             >
-                                <motion.button
-                                    whileHover={{ x: 5, backgroundColor: 'rgba(0,0,0,0.02)' }}
-                                    onClick={() => {
-                                        navigate(otherViewData.id === 'path' ? '/' : '/story')
-                                        setIsMenuOpen(false)
-                                        playSFX('nav_click.mp3')
-                                    }}
-                                    className="w-full flex items-center justify-between p-3.5 rounded-xl transition-all"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className={`p-2 rounded-lg bg-${otherViewData.color}-50 dark:bg-${otherViewData.color}-500/10 text-${otherViewData.color}-500`}>
-                                            <otherViewData.icon className="w-5 h-5" />
+                                {otherViewsData.map((item) => (
+                                    <motion.button
+                                        key={item.id}
+                                        whileHover={{ x: 5, backgroundColor: 'rgba(0,0,0,0.02)' }}
+                                        onClick={() => {
+                                            if (item.id === 'stories') {
+                                                navigate('/story')
+                                            } else if (item.id === 'cyrillic') {
+                                                navigate('/alphabet')
+                                            } else {
+                                                navigate('/')
+                                            }
+                                            setIsMenuOpen(false)
+                                            playSFX('nav_click.mp3')
+                                        }}
+                                        className="w-full flex items-center justify-between p-3.5 rounded-xl transition-all mb-1 last:mb-0"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className={`p-2 rounded-lg bg-${item.color}-50 dark:bg-${item.color}-500/10 text-${item.color}-500`}>
+                                                <item.icon className="w-5 h-5" />
+                                            </div>
+                                            <div className="text-left">
+                                                <span className="block font-bold uppercase tracking-widest text-xs text-slate-400 leading-none mb-1">{item.subtitle}</span>
+                                                <span className="block font-black uppercase tracking-tight text-sm text-slate-800 dark:text-white">{item.title}</span>
+                                            </div>
                                         </div>
-                                        <div className="text-left">
-                                            <span className="block font-bold uppercase tracking-widest text-xs text-slate-400 leading-none mb-1">{otherViewData.subtitle}</span>
-                                            <span className="block font-black uppercase tracking-tight text-sm text-slate-800 dark:text-white">{otherViewData.title}</span>
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-right">
+                                                <span className="block text-[10px] font-black text-slate-400 uppercase tracking-tighter">İLERLEME</span>
+                                                <span className="block text-sm font-black text-slate-700 dark:text-slate-300 leading-none">%{item.progress}</span>
+                                            </div>
+                                            <ProgressCircle progress={item.progress} color={item.color} />
                                         </div>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="text-right">
-                                            <span className="block text-[10px] font-black text-slate-400 uppercase tracking-tighter">İLERLEME</span>
-                                            <span className="block text-sm font-black text-slate-700 dark:text-slate-300 leading-none">%{otherViewData.progress}</span>
-                                        </div>
-                                        <ProgressCircle progress={otherViewData.progress} color={otherViewData.color} />
-                                    </div>
-                                </motion.button>
+                                    </motion.button>
+                                ))}
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -250,7 +318,7 @@ const LearningPath = ({ view }) => {
                     <PathProgress />
                 </div>
 
-                {view === 'path' ? (
+                {view !== 'stories' ? (
                     <div className="px-4">
                         {sectionOrder.map((sectionKey, sectionIndex) => {
                             const sectionLessons = groupedLessons[sectionKey] || []
@@ -343,13 +411,15 @@ const LearningPath = ({ view }) => {
 
                                             const isLeft = lessonIndex % 2 === 0
                                             const isLast = lessonIndex === sectionLessons.length - 1
-                                            const isActive = lesson.id === activeLesson?.id
+                                            // Determine if this is the target lesson to scroll to
+                                            const isTarget = lesson.id === targetScrollLessonId
 
                                             return (
                                                 <div
                                                     key={lesson.id}
+                                                    id={`lesson-node-${lesson.id}`}
                                                     className="relative"
-                                                    ref={isActive ? activeNodeRef : null}
+                                                    ref={isTarget ? activeNodeRef : null}
                                                 >
                                                     <div className={`flex items-center ${isLeft ? 'justify-start' : 'justify-end'}`}>
                                                         <div className={`${isLeft ? 'ml-8 md:ml-16' : 'mr-8 md:mr-16'}`}>
@@ -363,7 +433,7 @@ const LearningPath = ({ view }) => {
 
                                                     {!isLast && (
                                                         <svg
-                                                            className="w-full h-24 overflow-visible"
+                                                            className="w-full h-24 overflow-visible pointer-events-none"
                                                             viewBox="0 0 400 100"
                                                             preserveAspectRatio="none"
                                                         >

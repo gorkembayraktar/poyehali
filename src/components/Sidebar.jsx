@@ -28,6 +28,7 @@ function Sidebar() {
 
     const menuItems = [
         { label: 'ANA SAYFA', icon: HiHome, path: '/' },
+        { label: 'ALFABE', icon: HiAcademicCap, path: '/alphabet' },
         { label: 'LİDERLİK', icon: HiTrophy, path: '/leaderboard', disabled: true },
         { label: 'GÖREVLER', icon: HiBookOpen, path: '/quests', disabled: true },
         { label: 'MAĞAZA', icon: HiShoppingBag, path: '/shop', disabled: true },

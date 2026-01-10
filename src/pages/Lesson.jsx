@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { HiXMark, HiTrophy, HiSparkles, HiStar, HiBolt, HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2'
+import { HiXMark, HiTrophy, HiSparkles, HiStar, HiBolt, HiSpeakerWave, HiSpeakerXMark, HiLockClosed, HiExclamationTriangle } from 'react-icons/hi2'
 import { alphabet, getLettersByLevel, confusionSets } from '../data/alphabet'
 import { learningPath, getLessonById } from '../data/learningPath'
 import { useProgress } from '../contexts/ProgressContext'
@@ -19,6 +19,7 @@ function Lesson() {
     const { lessonId } = useParams()
     const navigate = useNavigate()
     const { isLessonUnlocked, startLesson, completeLesson, updateLessonProgress, progress } = useProgress()
+    const { playSFX, isMuted, toggleSound } = useSound()
 
     const lesson = getLessonById(lessonId)
     const [stage, setStage] = useState('introduction')
@@ -317,9 +318,15 @@ function Lesson() {
         }
     }
 
+    // Determine return path based on section
+    const returnPath = useMemo(() => {
+        if (!lesson) return '/'
+        return ['alphabet', 'phonetics', 'confusion'].includes(lesson.section) ? '/alphabet' : '/'
+    }, [lesson])
+
     // Handle exit
     const handleExit = () => {
-        navigate('/')
+        navigate(returnPath)
     }
 
     // Handle retry
@@ -435,7 +442,7 @@ function Lesson() {
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                onClick={() => navigate('/')}
+                                onClick={() => navigate(returnPath)}
                                 className="w-full py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-600 text-white font-bold shadow-lg shadow-orange-500/20"
                             >
                                 Devam Et
@@ -451,7 +458,7 @@ function Lesson() {
                                     Tekrar Dene
                                 </motion.button>
                                 <button
-                                    onClick={() => navigate('/')}
+                                    onClick={() => navigate(returnPath)}
                                     className="w-full py-3 rounded-xl text-slate-500 hover:text-slate-700 font-medium"
                                 >
                                     Ana Sayfaya Dön
@@ -464,7 +471,7 @@ function Lesson() {
         )
     }
 
-    const { isMuted, toggleSound } = useSound()
+
 
     // Get stage progress
     const totalStages = STAGES.filter(s => s !== 'confusion' || confusions.length > 0).length

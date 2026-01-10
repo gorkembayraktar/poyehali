@@ -6,8 +6,12 @@ import LearningPath from '../components/learning-path/LearningPath'
 import BottomNav from '../components/BottomNav'
 
 function Home({ view }) {
+  const sections = view === 'cyrillic'
+    ? ['alphabet', 'phonetics', 'confusion']
+    : ['vocabulary', 'practice']
+
   return (
-    <LearningPath view={view} />
+    <LearningPath view={view} sections={sections} />
   )
 }
 

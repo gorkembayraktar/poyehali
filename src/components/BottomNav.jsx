@@ -7,6 +7,7 @@ function BottomNav() {
 
     const menuItems = [
         { label: 'Ana Sayfa', icon: HiHome, path: '/' },
+        { label: 'Alfabe', icon: HiBookOpen, path: '/alphabet' },
         { label: 'Liderlik', icon: HiTrophy, path: '/leaderboard', disabled: true },
         { label: 'Görevler', icon: HiBookOpen, path: '/quests', disabled: true },
         { label: 'Mağaza', icon: HiShoppingBag, path: '/shop', disabled: true },
